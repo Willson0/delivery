@@ -34,5 +34,6 @@ coverage
 
 # Vitest
 __screenshots__/
-src/config.json
+
+/src/config.json
 ./src/config.json
