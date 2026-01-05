@@ -14,6 +14,8 @@ import {
 } from "@/utils.js";
 import router from "@/router.js";
 import HomeView from "@/views/HomeView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+import CartView from "@/views/CartView.vue";
 
 export default {
     name: "MainView",
@@ -38,6 +40,8 @@ export default {
         }
     },
     components: {
+        CartView,
+        ProfileView,
         HomeView,
         NavComponent
     },
@@ -323,16 +327,11 @@ export default {
         </div>
         <button @click="sendSettings">Сохранить</button>
     </div>
-    <div class="online">
-        <div>
-            <div class="online_circle"></div>
-            <p>{{online}}&nbsp; онлайн</p>
-        </div>
-    </div>
-    <div class="online_padding"></div>
     <div class="popup_notification_container"></div>
     <nav-component>
         <home-view v-if="$route.query.s === 'home'" />
+        <profile-view v-else-if="$route.query.s === 'profile'" />
+        <cart-view v-else-if="$route.query.s === 'cart'" />
     </nav-component>
 </template>
 

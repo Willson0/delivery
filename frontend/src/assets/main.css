@@ -1,17 +1,54 @@
+@font-face {
+    font-family: 'SF Pro';
+    src: url('../../public/fonts/SF-Pro-Display-Regular.otf') format('opentype');
+    font-weight:400;
+}
+@font-face {
+    font-family: 'SF Pro';
+    src: url('../../public/fonts/SF-Pro-Display-Medium.otf') format('opentype');
+    font-weight: 500;
+}
+@font-face {
+    font-family: 'SF Pro';
+    src: url('../../public/fonts/SF-Pro-Display-Light.otf') format('opentype');
+    font-weight: 300;
+}
+
 :root {
     --text: #FFFFFF;
     --background: #0E0E10;
     --transition: 0.2s;
     --addiction: #27262C;
+    --accent: #FF7700;
+    --gradient_button: linear-gradient(90deg, #FFC251, #FF7700, #FF3700);
+    --gradient_transparent: linear-gradient(transparent, #FF5900);
+    --inactive: #686661;
 }
 
 * {
     margin: 0;
     padding: 0;
-    font-family: 'Gilroy', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro", sans-serif;
     border: 0;
     -webkit-tap-highlight-color: transparent;
     font-size: 14px;
+}
+::-webkit-scrollbar {
+    width: 0 !important;  /* Убираем ширину скроллбара */
+    height: 0 !important; /* Убираем высоту скроллбара */
+    display: none;        /* Полное скрытие */
+}
+/* Для Firefox */
+html {
+    scrollbar-width: none; /* Скрываем скроллбар */
+    -ms-overflow-style: none; /* Для IE/Edge */
+}
+
+/* Для IE/Edge */
+body {
+    -ms-overflow-style: none;
+    background-color: var(--background);
+    color: var(--text);
 }
 input, textarea {
     outline:none;
@@ -105,3 +142,339 @@ button {
     transition: 0.2s;
 }
 
+
+/* HOME (MAIN) */
+.home {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-bottom: 70px;
+}
+.home_account {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 15px 12px;
+}
+.home_account_name {
+    color: rgba(255, 119, 0, 1);
+    font-size: 24px;
+    line-height: 24px;
+    margin: auto 0;
+    font-weight: 600;
+}
+.home_account_info {
+    padding: 4px;
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    border-radius: 24px;
+    background: var(--gradient_button);
+    cursor: pointer;
+}
+.home_account_info>img {
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    object-fit: cover;
+}
+.home_account_info_bank {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 20px;
+    margin: auto 8px;
+}
+
+.home_stories_slider {
+    padding: 0 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+}
+.home_stories_slider>div {
+    min-width: 85px;
+    width: 85px;
+    height: 110px;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+}
+.home_stories_slider>div>img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left:0;
+    z-index: 0;
+}
+.home_story_background {
+    width: 100%;
+    height: 100%;
+    background: var(--gradient_transparent);
+    position: absolute;
+    top: 0;
+    left:0;
+    z-index: 1;
+}
+.home_story_title {
+    z-index: 2;
+    position: relative;
+    margin: 7px;
+    margin-top: auto;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 11px;
+}
+
+.home_nav {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    padding: 0 12px;
+    margin-top: 15px;
+    overflow-x: auto;
+}
+.home_nav>div {
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+    cursor: pointer;
+    user-select: none;
+}
+.home_nav>div>img {
+    width: 28px;
+    height: 28px;
+    margin: auto;
+    margin-bottom: 6px;
+    object-fit: cover;
+    filter: grayscale(1);
+    transition: var(--transition);
+    user-select:none;
+}
+.home_nav>div>div {
+    color: var(--inactive);
+    font-weight: 500;
+    font-size: 13px;
+    transition: var(--transition);
+}
+.home_nav>div.active>img {
+    width: 45px;
+    height: 45px;
+    margin: 0 auto;
+    filter: grayscale(0);
+}
+.home_nav>div.active>div {
+    color: var(--text);
+    font-size: 13px;
+}
+
+.home_products {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0 12px;
+    margin-top: 36px;
+    column-gap: 14px;
+    row-gap: 20px;
+}
+
+.home_deliveryTime {
+    position: fixed;
+    left: 12px;
+    width: calc(100vw - 24px);
+    bottom: 12px;
+    padding: 18px 20px;
+    box-sizing: border-box;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    background-color: #0E0E0EB2;
+    backdrop-filter: blur(10.5px);
+    font-size: 14px;
+}
+
+
+/* PRODUCT */
+.product {
+    border-radius: 10px;
+    background: var(--addiction);
+    display: flex;
+    flex-direction: column;
+    padding: 5px 11px;
+    box-sizing: border-box;
+}
+.product>img {
+    width: 133px;
+    height: 136px;
+    object-fit: cover;
+}
+.product_name {
+    margin-top: 10px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text);
+}
+.product_weight {
+    margin-top: 6px;
+    color: var(--inactive);
+    font-size: 12px;
+}
+.product_price {
+    margin-top: 15px;
+    padding: 9px 11px;
+    background: var(--gradient_button);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    border-radius: 21px;
+    margin-bottom: 5px;
+    box-shadow: 5px 5px 30px 0 #0D0D0D;
+    cursor: pointer;
+}
+.product_price_main {
+    color: white;
+    font-size: 20px;
+    line-height: 100%;
+}
+.product_price_sale {
+    position: relative;
+    margin: auto 0;
+    display: flex;
+    height: fit-content;
+}
+.product_price_sale_price {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+}
+.product_price_sale>.line {
+    display: flex;
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    min-width: 100%;
+}
+
+
+/* PROFILE */
+.profile {
+    display: flex;
+    flex-direction: column;
+}
+.profile_account {
+    margin: 14px 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+}
+.profile_account_avatar {
+    width: 80px;
+    height: 80px;
+    -webkit-border-radius: 100%;
+    -moz-border-radius: 100%;
+    border-radius: 100%;
+    object-fit: cover;
+}
+.profile_account_info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.profile_account_info_name {
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 24px;
+}
+.profile_account_info_status {
+    font-size: 14px;
+    line-height: 14px;
+}
+.profile_account_settings {
+    width: 24px;
+    height: 24px;
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.profile_widgets {
+    margin-top: 20px;
+    padding: 0 12px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+}
+.profile_widgets>div {
+    padding: 10px;
+    background: linear-gradient(-214deg, #FFCD51, #FF7700);
+    position: relative;
+    height: 145px;
+    width: 135px;
+    min-width: 135px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.profile_widgets>div>div {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 100%;
+    color: white;
+}
+.profile_widgets>div>img {
+    position: absolute;
+}
+
+.profile_allergens {
+    margin-top: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+.profile_allergens_title,
+.profile_challenges_title {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 12px;
+}
+.profile_allergens_list {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0 12px;
+}
+.profile_allergens_list>button {
+    background: var(--gradient_button) !important;
+    color: white;
+}
+.profile_allergens_list>div,
+.profile_allergens_list>button {
+    padding: 13px 15px;
+    background: var(--addiction);
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px;
+    border-radius: 22px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 100%;
+}
+
+.profile_challenges {
+    margin-top: 43px;
+    display: flex;
+    flex-direction: column;
+    gap: 23px;
+}
+
+
+/* CART */
+.cart {
+    display: flex;
+    flex-direction: column;
+}
