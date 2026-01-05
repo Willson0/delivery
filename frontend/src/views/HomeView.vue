@@ -10,6 +10,7 @@ export default {
 </script>
 
 <template>
+    <button @click="toLink('cart')" style="color: white;">To cart</button>
     <div class="home">
         <div class="home_account">
             <div class="home_account_name">Vanya</div>
