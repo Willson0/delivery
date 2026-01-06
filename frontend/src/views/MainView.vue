@@ -16,6 +16,12 @@ import router from "@/router.js";
 import HomeView from "@/views/HomeView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import CartView from "@/views/CartView.vue";
+import ProductView from "@/views/ProductView.vue";
+import AddressView from "@/views/AddressView.vue";
+import HistoryView from "@/views/HistoryView.vue";
+import BonusView from "@/views/BonusView.vue";
+import OrderView from "@/views/OrderView.vue";
+import AuthView from "@/views/AuthView.vue";
 
 export default {
     name: "MainView",
@@ -40,6 +46,12 @@ export default {
         }
     },
     components: {
+        AuthView,
+        OrderView,
+        BonusView,
+        HistoryView,
+        AddressView,
+        ProductView,
         CartView,
         ProfileView,
         HomeView,
@@ -332,6 +344,12 @@ export default {
         <home-view v-if="$route.query.s === 'home'" />
         <profile-view v-else-if="$route.query.s === 'profile'" />
         <cart-view v-else-if="$route.query.s === 'cart'" />
+        <product-view v-else-if="$route.query.s === 'product'" />
+        <address-view v-else-if="$route.query.s === 'address'" />
+        <history-view v-else-if="$route.query.s === 'history'" />
+        <bonus-view v-else-if="$route.query.s === 'bonus'" />
+        <order-view v-else-if="$route.query.s === 'order'" />
+        <auth-view v-else-if="$route.query.s === 'auth'" />
     </nav-component>
 </template>
 

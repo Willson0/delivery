@@ -1,11 +1,14 @@
 <script>
+import {toLink} from "@/utils.js";
+
 export default {
-    name: "ProductComponent"
+    name: "ProductComponent",
+    methods: {toLink}
 }
 </script>
 
 <template>
-    <div class="product">
+    <div class="product" @click="toLink('product')">
         <img src="/pizza.png" alt="">
         <div class="product_name">Пицца 4 сыра</div>
         <div class="product_weight">400 г</div>

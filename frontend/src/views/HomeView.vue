@@ -11,6 +11,8 @@ export default {
 
 <template>
     <button @click="toLink('cart')" style="color: white;">To cart</button>
+    <button @click="toLink('order')" style="color: white;">To order</button>
+    <button @click="toLink('auth')" style="color: white;">To auth</button>
     <div class="home">
         <div class="home_account">
             <div class="home_account_name">Vanya</div>

@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.3",
+    "@yandex/ymaps3-types": "^1.0.18413413",
     "vite": "^7.3.0",
     "vite-plugin-vue-devtools": "^8.0.5"
   }
