@@ -3,12 +3,44 @@ import {openOverlay} from "@/utils.js";
 
 export default {
     name: "ProductView",
-    methods: {openOverlay}
+    data () {
+        return {
+
+        }
+    },
+    methods: {
+        openOverlay,
+        openInfo () {
+            let overlay = this.$refs.overlay;
+            overlay.style.display = "";
+
+            requestAnimationFrame(() => {
+                overlay.style.opacity = "1";
+            })
+
+            window.Telegram.WebApp.BackButton.offClick(window.backByQueryFunction);
+            window.Telegram.WebApp.BackButton.onClick(this.closeInfo);
+            window.Telegram.WebApp.BackButton.show();
+
+            document.body.style.overflow = "hidden";
+        },
+        closeInfo() {
+            window.Telegram.WebApp.BackButton.offClick(this.closeInfo);
+            window.Telegram.WebApp.BackButton.onClick(window.backByQueryFunction);
+            document.body.style.overflow = "";
+
+            let overlay = this.$refs.overlay;
+            overlay.style.opacity = "";
+            overlay.addEventListener("transitionend", () => {
+                overlay.style.display = "none";
+            }, {once: true})
+        }
+    }
 }
 </script>
 
 <template>
-    <div style="display: none" class="productView_settings_overlay">
+    <div style="display: none" class="productView_settings_overlay" ref="overlay">
         <div class="productView_settings_overlay_block">
             <div class="productView_settings_overlay_title">Убрать ингредиенты</div>
             <div class="productView_settings_overlay_container">
@@ -58,7 +90,7 @@ export default {
         </div>
     </div>
     <div class="productView">
-        <img src="/pizza.png" alt="" @click="openOverlay('productView_settings_overlay')">
+        <img src="/pizza.png" alt="" @click="openInfo">
         <div class="productView_info">
             <div class="productView_title">Пицца 4 сыра</div>
             <div class="productView_description">Неаполитанская пицца. Состав - моцарелла, сыр «Эмменталь», сыр с голубой плесенью, пармезан. Диаметр 30 см.</div>

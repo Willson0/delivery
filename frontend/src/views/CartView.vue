@@ -1,6 +1,11 @@
 <script>
 export default {
-    name: "CartView"
+    name: "CartView",
+    methods: {
+        close () {
+            window.backByQueryFunction();
+        }
+    }
 }
 </script>
 
@@ -13,7 +18,7 @@ export default {
             </svg>
         </div>
         <div class="cart_main">
-            <div class="cart_main_close">Закрыть</div>
+            <div class="cart_main_close" @click="close()">Закрыть</div>
             <div class="cart_list">
                 <div class="cart_list_item" v-for="el in 4">
                     <div class="cart_item_product">

@@ -41,7 +41,7 @@ export function notify (text, error) {
     }, 5000);
 }
 
-export function toLink (query, id = null, type = null, needback = 1) {
+export function toLink (query, id = null, type = null, needback = 1, verticalOpen = false) {
     document.body.style.overflow = "";
 
     if (id) router.push({ query: { s: query, id: id, type: type, needback: needback }});

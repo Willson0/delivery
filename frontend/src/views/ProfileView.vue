@@ -1,13 +1,16 @@
 <script>
-import {toLink} from "@/utils.js";
+import {openOverlay, toLink} from "@/utils.js";
+import AlleregensComponent from "@/components/AlleregensComponent.vue";
 
 export default {
     name: "ProfileView",
-    methods: {toLink}
+    components: {AlleregensComponent},
+    methods: {openOverlay, toLink}
 }
 </script>
 
 <template>
+    <alleregens-component />
     <div class="profile">
         <div class="profile_account">
             <img class="profile_account_avatar" src="https://img.freepik.com/premium-psd/3d-render-avatar-character_23-2150611783.jpg?semt=ais_hybrid&w=740" alt="">
@@ -34,7 +37,7 @@ export default {
         <div class="profile_allergens">
             <div class="profile_allergens_title">Аллергены</div>
             <div class="profile_allergens_list">
-                <button>+ Добавить</button>
+                <button @click="openOverlay('allergens', 'allergens_background')">+ Добавить</button>
                 <div v-for="al in ['Глютен', 'Лактоза']">{{ al }}</div>
             </div>
         </div>

@@ -212,7 +212,7 @@ export default {
 
                 if (this.queryHistory.length === 0) window.Telegram.WebApp.BackButton.hide();
             } else {
-                this.$router.push({ query: {s: 'profile'} });
+                this.$router.push({ query: {s: 'home'} });
             }
         },
         hideFooter () {

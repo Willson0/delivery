@@ -1,16 +1,36 @@
 <script>
 import ProductComponent from "@/components/ProductComponent.vue";
 import {toLink} from "@/utils.js";
+import CartView from "@/views/CartView.vue";
 
 export default {
     name: "HomeView",
-    methods: {toLink},
-    components: {ProductComponent}
+    components: {CartView, ProductComponent},
+    data () {
+        return {
+            selectedCategory: 1,
+        }
+    },
+    watch: {
+        selectedCategory () {
+            let nav = this.$refs.navigation;
+            nav.style.height = nav.clientHeight + "px";
+        }
+    },
+    methods: {
+        toLink,
+        openCart () {
+            let cart = document.querySelector(".cart");
+            cart.
+        }
+    }
 }
 </script>
 
 <template>
-    <button @click="toLink('cart')" style="color: white;">To cart</button>
+    <cart-view style="display: none"/>
+
+    <button @click="openCart" style="color: white;">To cart</button>
     <button @click="toLink('order')" style="color: white;">To order</button>
     <button @click="toLink('auth')" style="color: white;">To auth</button>
     <div class="home">
@@ -28,8 +48,9 @@ export default {
                 <div class="home_story_title">Ужинайте вкусно!</div>
             </div>
         </div>
-        <div class="home_nav">
-            <div :class="{active: el === 1}" v-for="el in 10">
+        <div class="home_nav" ref="navigation">
+            <div :class="{active: el === selectedCategory}" @click="selectedCategory = el"
+                 v-for="el in 10">
                 <img draggable="false" src="/star.png" alt="">
                 <div>Популярное</div>
             </div>
