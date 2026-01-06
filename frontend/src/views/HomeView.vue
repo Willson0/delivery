@@ -21,7 +21,6 @@ export default {
         toLink,
         openCart () {
             let cart = document.querySelector(".cart");
-            cart.
         }
     }
 }
