@@ -1,6 +1,9 @@
 <script>
+import ProductComponent from "@/components/ProductComponent.vue";
+
 export default {
-    name: "HistoryView"
+    name: "HistoryView",
+    components: {ProductComponent}
 }
 </script>
 
@@ -19,8 +22,12 @@ export default {
                 <div class="history_summa_value">1 000 Р</div>
             </div>
             <hr>
-            <div class="history_products">
-                <img v-for="el in 10" src="/pizza.png" alt="">
+            <div class="history_products_container">
+                <div class="history_product_transparent"></div>
+                <div class="history_product_transparent right"></div>
+                <div class="history_products">
+                    <product-component v-for="el in 10" :only-image="true"/>
+                </div>
             </div>
             <hr>
             <button>Повторить заказ</button>

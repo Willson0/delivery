@@ -9,27 +9,78 @@ export default {
     data () {
         return {
             selectedCategory: 1,
+            fullCart: false,
         }
     },
     watch: {
         selectedCategory () {
             let nav = this.$refs.navigation;
             nav.style.height = nav.clientHeight + "px";
+        },
+        fullCart () {
+            requestAnimationFrame(() => {
+                let width = document.querySelector('.home_deliveryTime_cart').clientWidth;
+                document.querySelector(".home_deliveryTime").style.width = width + "px";
+            })
         }
     },
     methods: {
         toLink,
         openCart () {
+            document.body.style.overflow = "hidden";
+            window.Telegram.WebApp.BackButton.offClick(window.backByQueryFunction);
+            window.Telegram.WebApp.BackButton.onClick(this.closeCart);
+            window.Telegram.WebApp.BackButton.show();
+
             let cart = document.querySelector(".cart");
+            let footer = cart.querySelector(".cart_footer");
+            cart.style.display = "";
+            cart.style.transform = "translateY(100%)";
+            cart.style.position = "fixed";
+
+            let background = this.$refs.cartBackground;
+            background.style.display = "";
+
+            requestAnimationFrame(() => {
+              cart.style.transform = "";
+              footer.style.opacity = "0";
+              background.style.opacity = "1";
+              cart.addEventListener("transitionend", () => {
+                  requestAnimationFrame(() => {
+                      footer.style.opacity = "1";
+                      // footer.addEventListener("transitionend", () => {
+                      //     toLink('cart');
+                      // })
+                  })
+              }, {once: true})
+            })
+        },
+        closeCart() {
+            document.body.style.overflow = "";
+            window.Telegram.WebApp.BackButton.offClick(this.closeCart);
+            window.Telegram.WebApp.BackButton.onClick(window.backByQueryFunction);
+
+            let cart = document.querySelector(".cart");
+            let footer = cart.querySelector(".cart_footer");
+            footer.style.opacity = "0";
+
+            let background = this.$refs.cartBackground;
+            background.style.opacity = "";
+
+            cart.style.transform = "translateY(100%)";
+            cart.addEventListener("transitionend", () => {
+                background.style.display = "none";
+                cart.style.display = "none";
+            }, {once: true})
         }
-    }
+    },
 }
 </script>
 
 <template>
-    <cart-view style="display: none"/>
+    <div ref="cartBackground" style="display: none" class="cart_background background"></div>
+    <cart-view style="display: none; z-index: 999999; width: 100vw; max-height: 100vh;" @close="closeCart()"/>
 
-    <button @click="openCart" style="color: white;">To cart</button>
     <button @click="toLink('order')" style="color: white;">To order</button>
     <button @click="toLink('auth')" style="color: white;">To auth</button>
     <div class="home">
@@ -55,9 +106,15 @@ export default {
             </div>
         </div>
         <div class="home_products">
-            <product-component v-for="el in 11" />
+            <product-component @test="fullCart = true" v-for="el in 11" />
         </div>
-        <div class="home_deliveryTime">Доставка от 35-45 минут</div>
+        <div class="home_deliveryTime">
+            <div class="home_deliveryTime_time" v-show="!fullCart">Доставка от 35-45 минут</div>
+            <div @click="openCart" class="home_deliveryTime_cart" v-show="fullCart">
+                <img src="/cart.png" alt="">
+                <div>552 ₽</div>
+            </div>
+        </div>
     </div>
 </template>
 

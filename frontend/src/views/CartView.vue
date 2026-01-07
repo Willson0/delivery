@@ -3,7 +3,7 @@ export default {
     name: "CartView",
     methods: {
         close () {
-            window.backByQueryFunction();
+            this.$emit('close');
         }
     }
 }
@@ -16,9 +16,17 @@ export default {
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1.5 5.5L8 12L14.5 5.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
+            <select name="" id="">
+                <option value="">Самара, Садовая улица, 23</option>
+                <option value="">Трехгорный, улица Островского, 20</option>
+                <option value="">Челябинск, Пушкинская улица, 56</option>
+                <option value="">Трехгорный, улица Островского, 20</option>
+                <option value="">Самара, Садовая улица, 23</option>
+            </select>
         </div>
         <div class="cart_main">
             <div class="cart_main_close" @click="close()">Закрыть</div>
+            <div class="cart_list_header"></div>
             <div class="cart_list">
                 <div class="cart_list_item" v-for="el in 4">
                     <div class="cart_item_product">

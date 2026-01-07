@@ -18,15 +18,21 @@ export default {
                 overlay.style.opacity = "1";
             })
 
-            window.Telegram.WebApp.BackButton.offClick(window.backByQueryFunction);
+            let backFunction = window.closeProductFunction != null ?
+                window.closeProductFunction : window.backByQueryFunction;
+
+            window.Telegram.WebApp.BackButton.offClick(backFunction);
             window.Telegram.WebApp.BackButton.onClick(this.closeInfo);
             window.Telegram.WebApp.BackButton.show();
 
             document.body.style.overflow = "hidden";
         },
         closeInfo() {
+            let backFunction = window.closeProductFunction != null ?
+                window.closeProductFunction : window.backByQueryFunction;
+
             window.Telegram.WebApp.BackButton.offClick(this.closeInfo);
-            window.Telegram.WebApp.BackButton.onClick(window.backByQueryFunction);
+            window.Telegram.WebApp.BackButton.onClick(backFunction);
             document.body.style.overflow = "";
 
             let overlay = this.$refs.overlay;
