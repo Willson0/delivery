@@ -12,6 +12,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tiptap/extension-bold": "^3.18.0",
+    "@tiptap/extension-document": "^3.18.0",
+    "@tiptap/extension-italic": "^3.18.0",
+    "@tiptap/extension-link": "^3.18.0",
+    "@tiptap/extension-paragraph": "^3.18.0",
+    "@tiptap/extension-text": "^3.18.0",
+    "@tiptap/extension-underline": "^3.18.0",
+    "@tiptap/vue-3": "^3.18.0",
+    "@vuepic/vue-datepicker": "^12.1.0",
     "axios": "^1.13.2",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4",

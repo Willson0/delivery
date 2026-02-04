@@ -9,7 +9,7 @@ import {
     endLoading,
     getPrevWithClass,
     levels,
-    notify,
+    notify, sumCart,
     toLink
 } from "@/utils.js";
 import router from "@/router.js";
@@ -22,6 +22,7 @@ import HistoryView from "@/views/HistoryView.vue";
 import BonusView from "@/views/BonusView.vue";
 import OrderView from "@/views/OrderView.vue";
 import AuthView from "@/views/AuthView.vue";
+import AcceptView from "@/views/AcceptView.vue";
 
 export default {
     name: "MainView",
@@ -31,21 +32,16 @@ export default {
             isGoingBack: false,
             firstLoading: true,
             touch: false,
-            notWhiteList: false,
 
             dragStartY: 0,
             dragging: false,
             draggingOverlay: null,
 
-            theme: "",
-            levels: levels,
-            selectedLevel: 'self',
-            faculty: "",
-
-            online: 0,
+            unlogged: false,
         }
     },
     components: {
+        AcceptView,
         AuthView,
         OrderView,
         BonusView,
@@ -113,14 +109,7 @@ export default {
         }
         else if (!this.$route.query.s) this.$router.push({ query: { s: 'home' }});
 
-        // this.fetchData();
-        // setInterval(() => {
-        //     axios.post(config.backend + "auth/online", {
-        //         "initData": window.Telegram.WebApp.initData,
-        //     }).then((response) => {
-        //         this.online = response.data.online;
-        //     });
-        // }, 20000);
+        this.fetchData();
 
         window.Telegram.WebApp.BackButton.onClick(this.backByQuery);
         window.backByQueryFunction = this.backByQuery;
@@ -163,6 +152,8 @@ export default {
                 this.queryHistory.push(from);
             }
 
+            window.Telegram.WebApp.BackButton.offClick(window.backFunction);
+            window.Telegram.WebApp.BackButton.onClick(window.backByQueryFunction);
             window.Telegram.WebApp.BackButton.show();
         }
     },
@@ -171,34 +162,19 @@ export default {
             axios.post(config.backend + "auth/profile", {
                 "initData": window.Telegram.WebApp.initData,
             }).then((response) => {
-                if (this.firstLoading) {
-                    this.firstLoading = false;
-                    endLoading();
-                }
+                endLoading("loading")
 
-                let user = response.data;
-                this.online = user?.online ?? 0;
+                let user = deepParse(JSON.stringify(response.data));
+                if (user.cart == null) user.cart = [];
+                user.cartSum = sumCart(user.cart, user.products);
 
-                user.courses.forEach(course => {
-                    const lessons = course.lessons;
-                    const total = lessons.length;
-                    const completed = lessons.filter(lesson =>
-                        lesson.user_points !== null && lesson.user_points >= -1
-                    ).length;
-
-                    course.progress = total > 0 ? Math.round((completed / total) * 100) : 0;
-                });
-
-                user = deepParse(JSON.stringify(user));
                 this.$store.dispatch("updateUser", user);
             }).catch((error) => {
                 console.log(error);
-                if (error.response.status === 423) {
-                    notify ("Доступ запрещен. Вы не находитесь в белом списке", 1);
-                    return this.notWhiteList = true;
+                if (error.response && error.response.status === 423) {
+                    return this.unlogged = true;
                 } else {
-                    document.querySelector(".unreg").style.display = "flex";
-                    endLoading();
+                    // endLoading();
                 }
             }).finally(() => {
             });
@@ -324,22 +300,10 @@ export default {
 </script>
 
 <template>
-<!--    <div class="loading"></div>-->
-    <div class="first_loading" v-if="user.isFirst === true">
-        <div class="first_loading_logo">Название</div>
-        <div class="ai_overlay_newSubject">
-            <div class="first_loading_level_title">Выберите уровень обучения</div>
-            <div class="ai_overlay_newSubject_select" id="new_select">
-                <div class="ai_overlay_newSubject_select_title">Уровень обучения</div>
-                <div class="ai_overlay_newSubject_select_main">
-                    <div v-for="(level, key) in levels" @click="selectedLevel = key" :class="{'active': selectedLevel === key}">{{level}}</div>
-                </div>
-            </div>
-            <input v-if="selectedLevel === 'student'" type="text" v-model="faculty" placeholder="Факультет" id="new_name">
-        </div>
-        <button @click="sendSettings">Сохранить</button>
-    </div>
+    <div class="loading" ref="loading"></div>
+    <auth-view v-if="unlogged" @logged="unlogged = false"/>
     <div class="popup_notification_container"></div>
+    <accept-view v-if="user.orders && user.orders.length > 0" />
     <nav-component>
         <home-view v-if="$route.query.s === 'home'" />
         <profile-view v-else-if="$route.query.s === 'profile'" />
@@ -349,7 +313,6 @@ export default {
         <history-view v-else-if="$route.query.s === 'history'" />
         <bonus-view v-else-if="$route.query.s === 'bonus'" />
         <order-view v-else-if="$route.query.s === 'order'" />
-        <auth-view v-else-if="$route.query.s === 'auth'" />
     </nav-component>
 </template>
 

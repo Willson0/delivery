@@ -3,18 +3,18 @@ import config from "@/config.json";
 import axios from "axios";
 
 export function notify (text, error) {
-    let notifyContainer = document.querySelector(".notification_container");
+    let notifyContainer = document.querySelector(".popup_notification_container");
     let div = document.createElement("div");
 
     if (error) {
-        div.innerHTML = `<div class="notification error">
+        div.innerHTML = `<div class="popup_notification error">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     <div>
                                         ${text}
                                     </div>
                                 </div>`
     } else {
-        div.innerHTML = `<div class="notification success">
+        div.innerHTML = `<div class="popup_notification success">
                                     <i class="fa-solid fa-circle-check"></i>
                                     <div>
                                         ${text}
@@ -23,7 +23,7 @@ export function notify (text, error) {
     }
     notifyContainer.appendChild(div);
 
-    let height = div.querySelector(".notification").getBoundingClientRect().height + 10;
+    let height = div.querySelector(".popup_notification").getBoundingClientRect().height + 10;
     div.style.visibility = "visible";
     div.style.transform = `translateY(-${height}px)`;
 
@@ -476,4 +476,68 @@ export function whatError(error) {
 
     // Ошибка конфигурации или что-то другое
     return error.message || 'Неизвестная ошибка';
+}
+
+
+export async function addToCart (id, notification = 1, isBonus = 0) {
+    let newUser = {...(this.$store.state.user)};
+
+    if (newUser.cart == null) newUser.cart = [];
+    if (newUser.cart.find(a => a.id === id && a.isBonus === isBonus) == null) newUser.cart.push({
+        id: id, count: 0, isBonus: isBonus,
+    });
+
+    let index = newUser.cart.findIndex(a => a.id === id && a.isBonus === isBonus);
+    newUser.cart[index].count += 1;
+
+    newUser.cartSum = sumCart(newUser.cart, newUser.products);
+
+    if (notification) notify("Успешно добавлено в корзину!");
+    this.$store.dispatch("updateUser", newUser);
+
+    await axios.post(config.backend + "auth/update", {
+        cart: newUser.cart,
+        initData: window.Telegram.WebApp.initData,
+    }).then((response) => {
+
+    }).catch((error) => {
+        notify(whatError(error),1);
+    })
+}
+
+export async function removeFromCart (id, isBonus = 0) {
+    let newUser = {...this.$store.state.user};
+
+    if (newUser.cart == null) newUser.cart = [];
+
+    let index = newUser.cart.findIndex(a => a.id === id && a.isBonus === isBonus);
+    if (newUser.cart[index] == null) return;
+
+    newUser.cart[index].count -= 1;
+
+    if (newUser.cart[index].count < 1) newUser.cart = newUser.cart.filter(a => a.id !== id || a.isBonus !== isBonus);
+
+    newUser.cartSum = sumCart(newUser.cart, newUser.products);
+
+    this.$store.dispatch("updateUser", newUser);
+
+    await axios.post(config.backend + "auth/update", {
+        cart: newUser.cart.length === 0 ? null : newUser.cart,
+        initData: window.Telegram.WebApp.initData,
+    }).then((response) => {
+
+    }).catch((error) => {
+        notify(whatError(error),1);
+    })
+}
+
+export function sumCart (cart, products, isBonus = 0) {
+    let cartSum = 0;
+    cart.forEach(product => {
+        let prod = products.find(pr => pr.id === Number(product.id));
+        if (Boolean(product.isBonus) === Boolean(isBonus))
+            cartSum += product.count *
+                (prod.priceDiscount !== 0 ? prod.priceDiscount : prod.price);
+    })
+    return cartSum;
 }

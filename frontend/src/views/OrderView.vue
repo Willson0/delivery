@@ -1,5 +1,8 @@
 <script>
 import AddressComponent from "@/components/AddressComponent.vue";
+import {notify, toLink, whatError} from "@/utils.js";
+import axios from "axios";
+import config from "@/config.json";
 
 export default {
     name: "OrderView",
@@ -9,10 +12,37 @@ export default {
             delivery: "",
             deliveriesData: {'flat': 'В квартиру', 'house': 'В частный дом', 'office': 'В офис'},
             isOnline: true,
+            isLoading: false,
         }
     },
     async mounted () {
         this.delivery = "flat";
+    },
+    methods: {toLink,
+        async createOrder () {
+            if (this.isLoading) return;
+
+            this.isLoading = true;
+            await axios.post(config.backend + "order", {
+                initData: window.Telegram.WebApp.initData,
+                address: {
+                    address: this.$refs.addressComponent.getString(),
+                    latitude: 0,
+                    longitude: 0,
+                    commentAddress: this.$refs.addressComponent.getComment(),
+                },
+                paymentType: 0,
+            }).then((response) => {
+                window.Telegram.WebApp.openLink(config.payment + "?id=" + response.data.id + "&method=2");
+
+                let newUser = {...this.user};
+                newUser.orders[0] = response.data.id;
+                this.$store.dispatch("updateUser", newUser);
+            }).catch((error) =>
+                notify(whatError(error), 1)
+            ).finally(() => this.isLoading = false);
+            // toLink('accept')
+        },
     },
     watch: {
         delivery (val) {
@@ -33,6 +63,11 @@ export default {
             if (this.isOnline) {
                 background.style.left = "0%";
             } else background.style.left = "calc(50% - 4px)";
+        },
+    },
+    computed: {
+        user () {
+            return this.$store.state.user;
         }
     }
 }
@@ -50,7 +85,7 @@ export default {
                         {{ text }}
                     </div>
                 </div>
-                <address-component />
+                <address-component ref="addressComponent" :user-selected="true"/>
             </div>
             <hr>
             <div class="order_payment">
@@ -62,8 +97,8 @@ export default {
                 </div>
                 <div class="order_description">Оплата происходит через АО “Тинькофф Банк” с использование банковских карт платёжных систем:</div>
             </div>
-            <div class="order_footer">
-                <button>Оплатить 1 000 Р</button>
+            <div @click="createOrder" class="order_footer">
+                <button>Оплатить {{ user.cartSum + 200 }} Р</button>
             </div>
         </div>
     </div>

@@ -1,7 +1,60 @@
 <?php
 
+use App\Http\Controllers\AddressController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AllergensController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BannerController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\StatsController;
+use App\Http\Middleware\CheckAdminMiddleware;
+use App\Http\Middleware\CheckTelegram;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(["prefix" => "api"], function () {
+    Route::group(["prefix" => "auth", "middleware" => CheckTelegram::class], function () {
+        Route::post("profile", [AuthController::class, "profile"]);
+        Route::post("update", [AuthController::class, "update"]);
+
+        Route::group(["prefix" => "phone", "middleware" => CheckTelegram::class], function () {
+            Route::post("/send", [AuthController::class, "sendCode"]);
+            Route::post("/{id}/cancel", [AuthController::class, "checkCode"]);
+        });
+    });
+
+    Route::group(["prefix" => "order", "middleware" => CheckTelegram::class], function () {
+        Route::post("/", [OrderController::class, "create"]);
+        Route::post("/{id}", [OrderController::class, "get"]);
+        Route::post("/{id}/cancel", [OrderController::class, "delete"]);
+    });
+
+    // ADMIN
+    Route::group(["prefix" => "stats", "middleware" => CheckAdminMiddleware::class], function () {
+        Route::get("/", [StatsController::class, "index"]);
+    });
+
+    Route::post("/admin/login", [AdminController::class, "login"]);
+    Route::group(["prefix" => "admin", "middleware" => CheckAdminMiddleware::class], function () {
+        Route::get("profile", [AdminController::class, "profile"]);
+        Route::post("logout", [AdminController::class, "logout"]);
+
+        Route::prefix('ads')->group(function () {
+            Route::get('/', [AdminController::class, 'ads']);
+            Route::post('/', [AdminController::class, 'createAd']);
+            Route::post('{ad}', [AdminController::class, 'updateAd']);
+            Route::delete('{ad}', [AdminController::class, 'deleteAd']);
+        });
+
+        Route::prefix('mailing')->group(function () {
+            Route::get("/", [PostController::class, 'index']);
+            Route::post("/", [PostController::class, "store"]);
+            Route::delete("/{post}", [PostController::class, "destroy"]);
+            Route::post("/{post}", [PostController::class, "update"]);
+        });
+
+        Route::post("banner", [BannerController::class, "update"]);
+        Route::post("bonus", [AdminController::class, "changeBonusPercent"]);
+    });
 });

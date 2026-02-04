@@ -1,16 +1,26 @@
 <script>
-import {openOverlay} from "@/utils.js";
+import {addToCart, openOverlay} from "@/utils.js";
+import config from "@/config.json";
 
 export default {
     name: "ProductView",
     data () {
         return {
-
+            isAll: false,
+            config: config,
+        }
+    },
+    props: {
+        product: {
+            type: Object,
+            required: true
         }
     },
     methods: {
+        addToCart,
         openOverlay,
         openInfo () {
+            return;
             let overlay = this.$refs.overlay;
             overlay.style.display = "";
 
@@ -41,7 +51,7 @@ export default {
                 overlay.style.display = "none";
             }, {once: true})
         }
-    }
+    },
 }
 </script>
 
@@ -71,8 +81,8 @@ export default {
             <div class="productView_settings_overlay_title">О продукте</div>
             <div class="productView_settings_overlay_info">
                 <div class="productView_settings_overlay_info_selector">
-                    <div class="active">100 г</div>
-                    <div>Вся пицца</div>
+                    <div :class="{active: !isAll}" @click="isAll = false">100 г</div>
+                    <div :class="{active: isAll}" @click="isAll = true">Вся пицца</div>
                 </div>
                 <div class="productView_settings_overlay_info_main">
                     <div>
@@ -96,12 +106,17 @@ export default {
         </div>
     </div>
     <div class="productView">
-        <img src="/pizza.png" alt="" @click="openInfo">
-        <div class="productView_info">
-            <div class="productView_title">Пицца 4 сыра</div>
-            <div class="productView_description">Неаполитанская пицца. Состав - моцарелла, сыр «Эмменталь», сыр с голубой плесенью, пармезан. Диаметр 30 см.</div>
+        <div class="productView_product" @click="openInfo">
+            <img :src="config.storage + product.image" alt="">
+            <div class="productView_transparent"></div>
         </div>
-        <button>+ 552</button>
+        <div class="productView_info">
+            <div class="productView_title">{{ product.name }}</div>
+            <div class="productView_description">{{ product.description }}</div>
+        </div>
+        <button @click="addToCart(product.id)">
+            + {{ product.priceDiscount !== 0 ? product.priceDiscount : product.price }}
+        </button>
     </div>
 </template>
 

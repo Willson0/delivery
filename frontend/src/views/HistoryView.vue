@@ -3,7 +3,12 @@ import ProductComponent from "@/components/ProductComponent.vue";
 
 export default {
     name: "HistoryView",
-    components: {ProductComponent}
+    components: {ProductComponent},
+    computed: {
+        user () {
+            return this.$store.state.user;
+        }
+    }
 }
 </script>
 

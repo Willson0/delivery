@@ -1,5 +1,7 @@
 <script>
 import LogoSVG from "@/svg/LogoSVG.vue";
+import axios from "axios";
+import {notify} from "@/utils.js";
 
 export default {
     name: "AuthView",
@@ -59,6 +61,33 @@ export default {
 
                 this.isReady = result.length === 10 && this.agree;
             } else this.isReady = false;
+        },
+        async sendCode () {
+            this.next = true;
+
+            let phone = "7";
+            this.$refs.phone.querySelectorAll('input').forEach(el => {
+                phone += el.value;
+            });
+
+            notify('your number is ' + phone)
+
+            // const params = new URLSearchParams();
+            // params.append("conditions[0][k]", "phone");
+            // params.append("conditions[0][v]", "+79823602595");
+            //
+            // await axios.post("https://kfsamara.ru/api/users/loginSms", params,
+            //     {
+            //         headers: {
+            //             'Authentication': 'a6f29cf6-4d53-4bb9-b188-3f8f1efee4f8',
+            //             'Content-Type': 'application/x-www-form-urlencoded',
+            //         }
+            //     }).then(response => {
+            //     console.log(response.data);
+            // })
+            //     .catch(error => {
+            //         console.error(error);
+            //     });
         }
     },
     computed: {
@@ -82,7 +111,7 @@ export default {
             <div class="authMain_title" v-if="!next">Введите номер телефона</div>
             <div class="authMain_title" v-else>Введите код</div>
 
-            <div class="authMain_input" v-if="next === false">
+            <div class="authMain_input" ref="phone" v-if="next === false">
                 <span>+ 7</span>
                 <div>
                     <input @keydown="oninp" v-for="el in 3" type="number" placeholder="0">
@@ -114,7 +143,7 @@ export default {
                 <div class="authMain_approval_text">Соглашаюсь на <a>Политику конфиденциальности</a></div>
             </div>
         </div>
-        <button @click="next = true" :class="{active: isReady}">Далее</button>
+        <button @click="sendCode" :class="{active: isReady}">Далее</button>
     </div>
 </template>
 
