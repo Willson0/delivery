@@ -3,7 +3,7 @@ import adminnav from "@/components/adminnav.vue";
 import axios from "axios";
 import config from "@/config.json";
 import {notify, removeLoading} from "@/assets/admin.js";
-import {deepParse, getDate} from "../../utils.js";
+import {deepParse, getDate, whatError} from "../../utils.js";
 
 export default {
     name: "adminShowView.vue",
@@ -15,6 +15,7 @@ export default {
             currentImageIdx: 0,
             isDeleted: false,
             config: config,
+            bonuses: 0,
         }
     },
     methods: {
@@ -42,6 +43,16 @@ export default {
                 this.user = deepParse(response.data);
                 alert ("Успешно поставлено " + input + " дней подписки");
             })
+        },
+        async changeBonus () {
+            if (this.bonuses < 0) return alert("Кол-во бонусов не может быть меньше нуля!")
+            await axios.post(config.backend + "admin/users/" + this.$route.params.id + "/bonus", {
+                bonus: this.bonuses
+            }).then((response) => {
+                alert("Успешно");
+            }).catch((error) => {
+                alert(whatError(error));
+            });
         }
     },
     async mounted() {
@@ -49,6 +60,7 @@ export default {
 
         await axios.get(config.backend + "admin/users/" + this.$route.params.id).then((response) => {
             this.user = response.data;
+            this.bonuses = this.user.bonus;
             removeLoading();
         }).catch((error) => {
             if (error.response) {
@@ -97,33 +109,15 @@ export default {
         </section>
 
         <div class="admin_user_sub">
-            <div v-if="user.is_sub === 1">Подписка активна до: {{ getDate(user.sub_date.replace(' ', 'T') + 'Z') }}</div>
-            <div v-else>Подписка неактивна</div>
-            <button @click="giveSubscription">Выдать подписку</button>
+            <div>Бонусов: </div>
+            <input v-model="bonuses" type="number" min="0">
+            <button @click="changeBonus">Изменить</button>
         </div>
 
         <!-- Курсы -->
-        <section aria-label="Список пройденных курсов">
-            <h3 class="section-title">Пройденные курсы</h3>
-
-            <div class="courses-grid">
-                <template v-for="course in user.courses">
-                    <article style="cursor: pointer" @click="$router.push('/admin/lessons/' + lesson.id)" class="course-card" v-for="lesson in course.lessons.filter(item => item.user_points !== null)" tabindex="0" aria-label="JavaScript для начинающих">
-                        <div class="course-top">
-                            <div class="course-logo"></div>
-                            <h4 class="course-title"></h4>
-                            <span class="badge-done" :style="{'background': lesson.user_points >= 50 ? 'green' : 'red', 'color': 'white', 'white-space': 'nowrap'}">{{ lesson.user_points }} баллов</span>
-                        </div>
-                        <div class="course-meta">
-                            <span>Название: {{ lesson.title }}</span>
-                            <span>ID урока: {{ lesson.id }}</span>
-                        </div>
-                        <div class="course-meta">
-                            <span>Пройден: {{ formatDateUTC(lesson.user_lesson_created_at) }}</span>
-                        </div>
-                    </article>
-                </template>
-            </div>
+        <section v-if="user.allergens" aria-label="Список пройденных курсов">
+            <h3 class="section-title">Аллергены:</h3>
+            <div>{{ JSON.parse(user.allergens) }}</div>
         </section>
     </adminnav>
 </template>
@@ -133,6 +127,10 @@ export default {
      display: flex;
      flex-direction: row;
      gap: 20px;
+ }
+ .admin_user_sub>input {
+     text-align: center;
+     width: 100px;
  }
  .admin_user_sub>button {
      padding: 8px 16px;

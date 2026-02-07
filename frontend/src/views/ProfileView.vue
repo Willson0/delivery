@@ -77,20 +77,20 @@ export default {
                 <div class="profile_account_info_name">{{ name }}</div>
 <!--                <div class="profile_account_info_status">Статус</div>-->
             </div>
-<!--            <img class="profile_account_settings" src="/settings.png" alt="">-->
+<!--            <img class="profile_account_settings" src="/settings.webp" alt="">-->
         </div>
         <div class="profile_widgets slider" @mousedown.prevent="mousedown">
             <div @click="isDragging ? null : toLink('bonus')">
                 <div class="profile_widget_text" style="font-weight: 700; font-size: 40px;">{{ user.bonus }}</div>
-                <img src="/coins.png" alt="" style="width: 100%; bottom: 0; left: 0;">
+                <img src="/coins.webp" alt="" style="width: 100%; bottom: 0; left: 0;">
             </div>
             <div @click="isDragging ? null : toLink('address')">
                 <div class="profile_widget_text">Адреса доставки</div>
-                <img src="/house.png" alt="" style="width: 85px; bottom: 0; right: 5px;">
+                <img src="/house.webp" alt="" style="width: 85px; bottom: 0; right: 5px;">
             </div>
             <div @click="isDragging ? null : toLink('history')">
                 <div class="profile_widget_text">История заказов</div>
-                <img src="/clock.png" alt="" style="width: 78px; bottom: -10px; right: 4px; transform: rotate(15deg)">
+                <img src="/clock.webp" alt="" style="width: 78px; bottom: -10px; right: 4px; transform: rotate(15deg)">
             </div>
         </div>
         <div class="profile_allergens">

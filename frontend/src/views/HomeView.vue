@@ -1,6 +1,6 @@
 <script>
 import ProductComponent from "@/components/ProductComponent.vue";
-import {toLink} from "@/utils.js";
+import {closeCart, openCart, toLink} from "@/utils.js";
 import CartView from "@/views/CartView.vue";
 import config from "@/config.json"
 
@@ -12,11 +12,11 @@ export default {
             selectedCategory: -1,
             config: config,
             icons: {
-                'пицца': 'pizza-section.png',
-                'бургеры': 'burger-section.png',
-                'роллы': 'sushi-section.png',
-                'шашлык': 'barbecue-section.png',
-                'напитки': 'drink-section.png'
+                'пицца': 'pizza-section.webp',
+                'бургеры': 'burger-section.webp',
+                'роллы': 'sushi-section.webp',
+                'шашлык': 'barbecue-section.webp',
+                'напитки': 'drink-section.webp'
             },
 
             mouseDown: false,
@@ -41,52 +41,8 @@ export default {
     },
     methods: {
         toLink,
-        openCart () {
-            document.body.style.overflow = "hidden";
-
-            window.Telegram.WebApp.BackButton.offClick(window.backByQueryFunction);
-            window.Telegram.WebApp.BackButton.onClick(this.closeCart);
-            window.Telegram.WebApp.BackButton.show();
-            window.backFunction = this.closeCart;
-
-            let cart = this.$refs.cartOverlay;
-            let footer = cart.querySelector(".cart_footer");
-            cart.style.display = "";
-            cart.style.transform = "translateY(100%)";
-            cart.style.position = "fixed";
-
-            let background = this.$refs.cartBackground;
-            background.style.display = "";
-
-            requestAnimationFrame(() => {
-              cart.style.transform = "";
-              footer.style.opacity = "0";
-              background.style.opacity = "1";
-              cart.addEventListener("transitionend", () => {
-                  requestAnimationFrame(() => {
-                      footer.style.opacity = "1";
-                  })
-              }, {once: true})
-            })
-        },
-        closeCart() {
-            document.body.style.overflow = "";
-            window.Telegram.WebApp.BackButton.offClick(this.closeCart);
-            window.Telegram.WebApp.BackButton.onClick(window.backByQueryFunction);
-
-            let cart = this.$refs.cartOverlay;
-            let footer = cart.querySelector(".cart_footer");
-            footer.style.opacity = "0";
-
-            let background = this.$refs.cartBackground;
-            background.style.opacity = "";
-
-            cart.style.transform = "translateY(100%)";
-            cart.addEventListener("transitionend", () => {
-                background.style.display = "none";
-                cart.style.display = "none";
-            }, {once: true})
-        },
+        closeCart,
+        openCart,
         openLink (url) {
             window.Telegram.WebApp.openLink(url);
         },
@@ -189,7 +145,7 @@ export default {
         </div>
         <div class="home_nav slider" ref="navigation" @mousedown="mousedown">
             <div :class="{active: -1 === selectedCategory}" @click="this.isDragging ? null : selectedCategory = -1">
-                <img draggable="false" src="/star.png" alt="">
+                <img draggable="false" src="/star.webp" alt="">
                 <div>Популярное</div>
             </div>
             <div :class="{active: section.id === selectedCategory}" @click="this.isDragging ? null : selectedCategory = section.id"
@@ -204,7 +160,7 @@ export default {
         <div class="home_deliveryTime" @click="fullCart ? openCart() : null">
             <div class="home_deliveryTime_time" v-show="!fullCart">Доставка от 35-45 минут</div>
             <div class="home_deliveryTime_cart" v-show="fullCart">
-                <img src="/cart.png" alt="">
+                <img src="/cart.webp" alt="">
                 <div>{{ user.cartSum }} ₽</div>
             </div>
         </div>

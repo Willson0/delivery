@@ -105,9 +105,9 @@ export default {
             <div class="adminnav_main_nav_background"></div>
             <div class="adminnav_main_nav_website">
                 <div class="adminnav_main_nav_website_logo">
-<!--                    <img src="/logo.png" alt="">-->
+<!--                    <img src="/logo.webp" alt="">-->
                 </div>
-                <p>AiModi</p>
+                <p>KFSamara</p>
             </div>
             <div class="adminnav_main_nav_line"></div>
             <div class="adminnav_main_nav_main">
@@ -116,11 +116,11 @@ export default {
                     <i class="fa-solid fa-code-branch"></i>
                     <p>Dashboard</p>
                 </div>
-<!--                <div @click="$router.push('/admin/users')">-->
-<!--                    <div v-if="$route.path === '/admin/users'" class="adminnav_main_nav_main_el_point">&middot;</div>-->
-<!--                    <i class="fa-solid fa-user"></i>-->
-<!--                    <p>Пользователи</p>-->
-<!--                </div>-->
+                <div @click="$router.push('/admin/users')">
+                    <div v-if="$route.path === '/admin/users'" class="adminnav_main_nav_main_el_point">&middot;</div>
+                    <i class="fa-solid fa-user"></i>
+                    <p>Пользователи</p>
+                </div>
 <!--                <div @click="$router.push('/admin/courses')">-->
 <!--                    <div v-if="$route.path === '/admin/courses'" class="adminnav_main_nav_main_el_point">&middot;</div>-->
 <!--                    <i class="fa-solid fa-book"></i>-->

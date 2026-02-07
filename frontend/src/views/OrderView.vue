@@ -23,12 +23,13 @@ export default {
             if (this.isLoading) return;
 
             this.isLoading = true;
+            let coords = this.$refs.addressComponent.getCoords();
             await axios.post(config.backend + "order", {
                 initData: window.Telegram.WebApp.initData,
                 address: {
                     address: this.$refs.addressComponent.getString(),
-                    latitude: 0,
-                    longitude: 0,
+                    latitude: coords[0],
+                    longitude: coords[1],
                     commentAddress: this.$refs.addressComponent.getComment(),
                 },
                 paymentType: 0,

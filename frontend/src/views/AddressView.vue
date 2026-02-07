@@ -64,7 +64,7 @@ export default {
             icon.style.height = "24px";
             icon.style.objectFit = "cover";
             icon.style.transform = "translate(-50%, -50%)"
-            icon.src = "/pizza.png"
+            icon.src = "/pizza.webp"
 
             const marker = new YMapMarker({
                 coordinates: [37.588144, 55.733842]

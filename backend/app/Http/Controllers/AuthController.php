@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthUpdateRequest;
 use App\Models\Ad;
 use App\Models\Order;
+use App\Models\PhoneRequest;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -66,11 +68,100 @@ class AuthController extends Controller
         return response()->json("ok");
     }
 
-    public function sendCode (Request $request) {
-        // send code to phone
+    public function register (Request $request) {
+        if (!$request->has("phone")) abort(400, "Не введен номер телефона");
+
+        $req = Http::withHeaders([
+            'Authentication' => env("INTERNAL_TOKEN"),
+        ])->post("https://kfsamara.ru/api/users/get");
+
+        $data = $req->json()["data"];
+        $response = collect($data)->firstWhere('phone', $request->phone);
+        if (!$response) {
+            $req = Http::withHeaders([
+                'Authentication' => env("INTERNAL_TOKEN"),
+            ])->post("https://kfsamara.ru/api/users/add", [
+                "data" => [
+                    "name" => $request["initData"]["user"]["first_name"] + $request["initData"]["user"]["last_name"],
+                    "phone" => $request->phone, // todo: check correct number
+                    "type" => 2,
+                    "status" => 0,
+                    "password" => 1
+                ]
+            ]);
+            if ($req->status() !== 200) {
+                Log::critical($req->json());
+                abort(400, "Ошибка на стороне сервера");
+            }
+        }
+
+        $req = Http::withHeaders([
+            'Authentication' => env("INTERNAL_TOKEN"),
+        ])->post("https://kfsamara.ru/api/users/loginSms", [
+            "conditions" => [
+                [
+                    "k" => "phone",
+                    "v" => "+" . $request->phone,
+                ]
+            ]
+        ]);
+
+        if ($req->status() !== 200) {
+            Log::critical($req->json());
+            abort(400, "Ошибка на стороне сервера");
+        }
+
+        $old = PhoneRequest::where("user_id", $request["initData"]["user"]["id"])->first();
+        if ($old) $old->delete();
+
+        PhoneRequest::create([
+            "user_id" => $request["initData"]["user"]["id"],
+            "phone" =>  $request->phone,
+        ]);
+
+        return response()->json("ok");
     }
 
-    public function checkCode (Request $request) {
-        // check code
+    public function check (Request $request) {
+        if (!$request->has("code")) abort(400, "Не введен код");
+
+        $old = PhoneRequest::where("user_id", $request["initData"]["user"]["id"])->first();
+        if (!$old) abort(400, "Код не был отправлен");
+
+        $req = Http::withHeaders([
+            'Authentication' => env("INTERNAL_TOKEN"),
+        ])->post("https://kfsamara.ru/api/users/smsCheck", [
+            "conditions" => [
+                [
+                    "k" => "phone",
+                    "v" => $old->phone,
+                ],
+                [
+                    "k" => "code",
+                    "v" => $request->code,
+                ]
+            ]
+        ]);
+        if ($req->status() !== 200) {
+            Log::critical($req->json());
+            abort(400, "Ошибка на стороне сервера");
+        }
+
+        if (!$req->json()["data"]) abort(403, "Неправильный код!");
+        $userId = $req->json()["data"]["id"];
+
+        // $old->delete();
+
+        User::where("telegram_id", $request["initData"]["user"]["id"])->update([
+            "telegram_id" => 0
+        ]);
+
+        $oldUser = User::where("id", $userId)->first();
+        if ($oldUser) $oldUser->update(["telegram_id" => $request["initData"]["user"]["id"]]);
+        else User::create([
+            "id" => $userId,
+            "telegram_id" => $request["initData"]["user"]["id"],
+        ]);
+        return $this->profile($request);
     }
 }

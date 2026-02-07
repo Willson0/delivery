@@ -480,6 +480,7 @@ export function whatError(error) {
 
 
 export async function addToCart (id, notification = 1, isBonus = 0) {
+    if (id === null) return;
     let newUser = {...(this.$store.state.user)};
 
     if (newUser.cart == null) newUser.cart = [];
@@ -540,4 +541,51 @@ export function sumCart (cart, products, isBonus = 0) {
                 (prod.priceDiscount !== 0 ? prod.priceDiscount : prod.price);
     })
     return cartSum;
+}
+
+export function openCart () {
+    document.body.style.overflow = "hidden";
+
+    window.Telegram.WebApp.BackButton.offClick(window.backByQueryFunction);
+    window.Telegram.WebApp.BackButton.onClick(this.closeCart);
+    window.Telegram.WebApp.BackButton.show();
+    window.backFunction = this.closeCart;
+
+    let cart = this.$refs.cartOverlay;
+    let footer = cart.querySelector(".cart_footer");
+    cart.style.display = "";
+    cart.style.transform = "translateY(100%)";
+    cart.style.position = "fixed";
+
+    let background = this.$refs.cartBackground;
+    background.style.display = "";
+
+    requestAnimationFrame(() => {
+        cart.style.transform = "";
+        footer.style.opacity = "0";
+        background.style.opacity = "1";
+        cart.addEventListener("transitionend", () => {
+            requestAnimationFrame(() => {
+                footer.style.opacity = "1";
+            })
+        }, {once: true})
+    })
+}
+export function closeCart() {
+    document.body.style.overflow = "";
+    window.Telegram.WebApp.BackButton.offClick(this.closeCart);
+    window.Telegram.WebApp.BackButton.onClick(window.backByQueryFunction);
+
+    let cart = this.$refs.cartOverlay;
+    let footer = cart.querySelector(".cart_footer");
+    footer.style.opacity = "0";
+
+    let background = this.$refs.cartBackground;
+    background.style.opacity = "";
+
+    cart.style.transform = "translateY(100%)";
+    cart.addEventListener("transitionend", () => {
+        background.style.display = "none";
+        cart.style.display = "none";
+    }, {once: true})
 }

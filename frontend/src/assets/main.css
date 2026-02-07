@@ -559,6 +559,7 @@ button {
     top: 0; left: 0;
     max-height: 100vh;
     height: 100vh;
+    min-height: 100vh;
 }
 .cart_background {
     position: fixed;
@@ -605,7 +606,8 @@ button {
     background: var(--addiction);
     padding: 16px 0;
     padding-bottom: 0;
-    height: calc(100% - 40px);
+    /*height: calc(100% - 40px);*/
+    height: 100%;
     position: relative;
 }
 .cart_main_close {
@@ -804,7 +806,7 @@ button {
 }
 .productView_transparent {
     position: absolute;
-    bottom: 0; left: 0;
+    bottom: -4px; left: 0;
     height: 100px;
     width: 100%;
     z-index: 99999999999999999;
@@ -1203,6 +1205,21 @@ button {
     height: 86px;
     object-fit: cover;
     cursor: pointer;
+    border-radius: 10px;
+}
+.history_products>div {
+    min-width: 86px;
+    width: 86px;
+    height: 86px;
+    border: 1px solid grey;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+}
+.history_products>div>span {
+    margin: auto;
+    font-size: 14px;
+    line-height: 14px;
 }
 .history>div>button {
     padding-top: 16px;

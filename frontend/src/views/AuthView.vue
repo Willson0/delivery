@@ -1,7 +1,8 @@
 <script>
 import LogoSVG from "@/svg/LogoSVG.vue";
 import axios from "axios";
-import {notify} from "@/utils.js";
+import {deepParse, notify, sumCart, whatError} from "@/utils.js";
+import config from "@/config.json";
 
 export default {
     name: "AuthView",
@@ -11,6 +12,7 @@ export default {
             next: false,
             isReady: false,
             agree: false,
+            isLoading: false,
         }
     },
     methods: {
@@ -52,17 +54,25 @@ export default {
             }
         },
         updateReady () {
-            if (!this.next) {
-                let inputs = document.querySelectorAll('.authMain_input input');
-                let result = "";
-                inputs.forEach(el => {
-                    result += el.value;
-                });
+            requestAnimationFrame(() => {
+                if (!this.next) {
+                    let inputs = document.querySelectorAll('.authMain_input input');
+                    let result = "";
+                    inputs.forEach(el => {
+                        result += el.value;
+                    });
 
-                this.isReady = result.length === 10 && this.agree;
-            } else this.isReady = false;
+                    this.isReady = result.length === 10 && this.agree;
+                } else {
+                    let code = "";
+                    this.$refs.code.querySelectorAll('input').forEach(el => code += el.value);
+
+                    this.isReady = code.length === 4;
+                }
+            })
         },
         async sendCode () {
+            if (this.isLoading) return;
             this.next = true;
 
             let phone = "7";
@@ -70,24 +80,39 @@ export default {
                 phone += el.value;
             });
 
-            notify('your number is ' + phone)
+            this.isLoading = true;
+            await axios.post(config.backend + "auth/register", {
+                initData: window.Telegram.WebApp.initData,
+                phone: phone,
+            }).then((response) => {
+            }).catch((error) => {
+                // if (error.response && error.response.data && error.response.data.message)
+                //     if (error.response.data.message.contains('SMS Error. More SMS for phone')) return;
+                // notify(whatError(error), 1)
+            }).finally(() => this.isLoading = false);
+        },
+        async checkCode () {
+            if (this.isLoading) return;
+            this.next = true;
 
-            // const params = new URLSearchParams();
-            // params.append("conditions[0][k]", "phone");
-            // params.append("conditions[0][v]", "+79823602595");
-            //
-            // await axios.post("https://kfsamara.ru/api/users/loginSms", params,
-            //     {
-            //         headers: {
-            //             'Authentication': 'a6f29cf6-4d53-4bb9-b188-3f8f1efee4f8',
-            //             'Content-Type': 'application/x-www-form-urlencoded',
-            //         }
-            //     }).then(response => {
-            //     console.log(response.data);
-            // })
-            //     .catch(error => {
-            //         console.error(error);
-            //     });
+            let code = "";
+            this.$refs.code.querySelectorAll('input').forEach(el => code += el.value);
+
+            this.isLoading = true;
+            await axios.post(config.backend + "auth/check", {
+                initData: window.Telegram.WebApp.initData,
+                code: code,
+            }).then((response) => {
+                let user = deepParse(JSON.stringify(response.data));
+                if (user.cart == null) user.cart = [];
+                user.cartSum = sumCart(user.cart, user.products);
+
+                this.$store.dispatch("updateUser", user);
+
+                notify("Успешная авторизация!");
+                this.$emit("logged");
+            }).catch((error) => notify(whatError(error)))
+                .finally(() => this.isLoading = false);
         }
     },
     computed: {
@@ -126,9 +151,9 @@ export default {
                     <input @keydown="oninp" v-for="el in 2" type="number" placeholder="0">
                 </div>
             </div>
-            <div class="authMain_input code" v-else>
-                <div v-for="bl in 2">
-                    <div v-for="inp in 3">
+            <div class="authMain_input code" ref="code" v-else>
+                <div v-for="bl in 1">
+                    <div v-for="inp in 4">
                         <input @keydown="oninp($event, true)" type="number">
                         <div></div>
                     </div>
@@ -143,7 +168,7 @@ export default {
                 <div class="authMain_approval_text">Соглашаюсь на <a>Политику конфиденциальности</a></div>
             </div>
         </div>
-        <button @click="sendCode" :class="{active: isReady}">Далее</button>
+        <button @click="isReady ? (!next ? sendCode() : checkCode()) : null" :class="{active: isReady}">Далее</button>
     </div>
 </template>
 

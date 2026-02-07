@@ -73,27 +73,18 @@ class AdminController extends Controller
         return utils::index(User::class, $request, true);
     }
     public function showUser (User $user, Request $request) {
-        $user->levels = json_decode(env("LEVELS"), true);
-        $user->courses = Course::all();
-        foreach ($user->courses as &$course) {
-            $course->lessons = Lesson::where("course_id", $course->id)->
-            leftJoin('user_lessons', function($join) use ($user) {
-                $join->on('lessons.id', '=', 'user_lessons.lesson_id')
-                    ->where('user_lessons.user_id', '=', $user->id);
-            })
-                ->select('lessons.id', 'lessons.title', 'lessons.description', "lessons.count_tries", 'lessons.number', 'user_lessons.id as user_lesson_id', 'user_lessons.points as user_points', 'user_lessons.created_at as user_lesson_created_at')
-                ->orderBy('lessons.number')
-                ->get()
-                ->groupBy('id')
-                ->map(function($items) {
-                    $last = $items->whereNotNull('user_lesson_id')->sortByDesc('user_lesson_id')->first() ?? $items->first();
-                    $last->user_count_tries = $items->whereNotNull('user_lesson_id')->count();
-                    return $last;
-                })
-                ->values();
-        }
-
         return $user;
+    }
+
+    public function changeUserBonus (User $user, Request $request) {
+        if (!$request->has("bonus")) abort(400, "Не введено количество бонусов");
+        if (!is_numeric($request->bonus)) abort(400, "Количество должно быть числом!");
+        if ($request->bonus < 0) abort(400, "Количество бонусов не может быть меньше 0");
+
+        $user->bonus = $request->bonus;
+        $user->save();
+
+        return response()->json("ok");
     }
 
     public function ads () {

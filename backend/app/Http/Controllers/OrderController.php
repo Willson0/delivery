@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderCreateRequest;
 use App\Models\Order;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -99,20 +100,22 @@ class OrderController extends Controller
         ])->post("https://kfsamara.ru/api/orders/create", $req);
         $data = $backendRequest->json()["data"];
 
+        $plusBonus = $rublesSum * (Setting::where("key", "bonusPercent")->first()->value / 100);
         $order = Order::create([
             "id" =>  $data["id"],
             "user_id" => $user["id"],
             "bonus" => $bonusSum,
+            "plus_bonus" => $plusBonus,
             "products" => json_encode(array_column($cart, "id")),
         ]);
 
         $user->update([
             "cart" => null,
-            "bonus" => $user->bonus - $bonusSum,
+            "bonus" => $user->bonus - $bonusSum + $plusBonus,
         ]);
 
-        // todo: clear cart before create order
-        // todo: - bonus from account
+        // todo: create field plusBonus on order
+        // todo: admin users
 
         return response()->json($order);
     }
@@ -135,10 +138,7 @@ class OrderController extends Controller
                                         "finish" => true,
                                     ]);
         else if ($data["status"] === 16) {
-            $user->update([
-                "bonus" => $user->bonus + $order->bonus,
-            ]);
-            $order->delete();
+            $this->onDelete($user, $order);
         }
 
         return response()->json(array_merge($data, $order->toArray()));
@@ -159,8 +159,45 @@ class OrderController extends Controller
         $data = $backendRequest->json()["data"];
 
         if ($data["status"] !== 0) abort(400, "Нельзя отменить оплаченный заказ");
-        $order->delete();
+        $this->onDelete($user, $order);
 
         return response()->json(array_merge($data, $order->toArray()));
+    }
+
+    private function onDelete(User $user, Order $order) {
+        $user->update([
+            "bonus" => $user->bonus + $order->bonus - $order->plus_bonus,
+        ]);
+        $order->delete();
+    }
+
+    public function history (Request $request) {
+        $user = User::where("telegram_id", $request["initData"]["user"]["id"])->first();
+        if (!$user) abort(423, "Unregistered");
+
+        $backendRequest = Http::withHeaders([
+            'Authentication' => env("INTERNAL_TOKEN"),
+        ])->post("https://kfsamara.ru/api/orders/get", [
+            "conditions" => [
+                [
+                    "k" => "clientId",
+                    "v" => $user->id,
+                    "op" => 0,
+                    "con" => 0
+                ]
+            ],
+            "orders" => [
+                [
+                    "k" => "id",
+                    "isd" => 0
+                ]
+            ],
+            "limits" => [0, 1000000]
+        ]);
+        $data = $backendRequest->json()["data"];
+        usort($data, function($a, $b) {
+            return $b["dateCreate"] <=> $a["dateCreate"];
+        });
+        return response()->json($data);
     }
 }

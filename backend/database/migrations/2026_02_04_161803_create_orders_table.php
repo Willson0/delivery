@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreign("user_id")->references("id")->on("users");
 
             $table->unsignedInteger("bonus")->default(0);
+            $table->unsignedInteger("plus_bonus")->default(0);
 
             $table->boolean("finish")->default(false);
 

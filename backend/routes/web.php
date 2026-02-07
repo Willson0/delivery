@@ -18,13 +18,12 @@ Route::group(["prefix" => "api"], function () {
         Route::post("profile", [AuthController::class, "profile"]);
         Route::post("update", [AuthController::class, "update"]);
 
-        Route::group(["prefix" => "phone", "middleware" => CheckTelegram::class], function () {
-            Route::post("/send", [AuthController::class, "sendCode"]);
-            Route::post("/{id}/cancel", [AuthController::class, "checkCode"]);
-        });
+        Route::post("register", [AuthController::class, "register"]);
+        Route::post("check", [AuthController::class, "check"]);
     });
 
     Route::group(["prefix" => "order", "middleware" => CheckTelegram::class], function () {
+        Route::post("/history", [OrderController::class, "history"]);
         Route::post("/", [OrderController::class, "create"]);
         Route::post("/{id}", [OrderController::class, "get"]);
         Route::post("/{id}/cancel", [OrderController::class, "delete"]);
@@ -52,6 +51,12 @@ Route::group(["prefix" => "api"], function () {
             Route::post("/", [PostController::class, "store"]);
             Route::delete("/{post}", [PostController::class, "destroy"]);
             Route::post("/{post}", [PostController::class, "update"]);
+        });
+
+        Route::prefix('users')->group(function () {
+            Route::get('/', [AdminController::class, 'users']);
+            Route::get('{user}', [AdminController::class, 'showUser']);
+            Route::post("{user}/bonus", [AdminController::class, 'changeUserBonus']);
         });
 
         Route::post("banner", [BannerController::class, "update"]);

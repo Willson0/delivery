@@ -11,6 +11,7 @@ export default {
                 address: "", door: "", doorphone: "",
                 floor: "", flat: "", comment: "",
             },
+            coords: [],
         }
     },
     async mounted () {
@@ -33,10 +34,23 @@ export default {
         getComment () {
             return this.address.comment;
         },
+        getCoords () {
+            if (this.coords.length > 0) return this.coords;
+            if (!window.ymaps3?.ready) notify('Ошибка Yandex Maps', 1);
+
+            ymaps3.search({
+                'text': "Самара. " + this.address.address,
+            }).then((res) => {
+                this.coords = res[0].geometry.coordinates;
+            });
+            return this.coords;
+        },
         loadAddress () {
             if (this.userSelected && this.user.address && this.user.addresses[this.user.address]) {
                 this.address = this.user.addresses[this.user.address];
                 this.address.comment = this.user.addresses[this.user.address].commentAddress;
+
+                this.coords = [this.user.address.latitude, this.user.address.longitude];
             }
         },
         async checkAddress (latitude, longitude) {

@@ -162,8 +162,6 @@ export default {
             axios.post(config.backend + "auth/profile", {
                 "initData": window.Telegram.WebApp.initData,
             }).then((response) => {
-                endLoading("loading")
-
                 let user = deepParse(JSON.stringify(response.data));
                 if (user.cart == null) user.cart = [];
                 user.cartSum = sumCart(user.cart, user.products);
@@ -177,6 +175,7 @@ export default {
                     // endLoading();
                 }
             }).finally(() => {
+                endLoading("loading")
             });
         },
         backByQuery() {
