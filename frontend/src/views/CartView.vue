@@ -88,10 +88,10 @@ export default {
                             <div class="cart_item_product_info_name">{{ getProduct(product.id).name }}</div>
                             <div class="cart_item_product_info_count">{{ product.count }} шт</div>
                         </div>
-                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4.05755 15.3754L13.2227 6.14804L10.0175 2.94287L0.807451 12.1529C0.621665 12.3387 0.51646 12.5902 0.514584 12.8529L0.499938 14.9033C0.495608 15.5095 1.02733 15.9801 1.62852 15.9021L3.47666 15.6624C3.69677 15.6339 3.90113 15.5329 4.05755 15.3754Z" fill="#8E8E93" stroke="#8E8E93" stroke-linecap="round"/>
-                            <path d="M15.2368 4.66603L11.7368 1.16603C11.7368 1.16603 13.7366 -0.333672 15.2368 1.16632C16.737 2.66632 15.2368 4.66603 15.2368 4.66603Z" fill="#8E8E93" stroke="#8E8E93" stroke-linecap="round"/>
-                        </svg>
+<!--                        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--                            <path d="M4.05755 15.3754L13.2227 6.14804L10.0175 2.94287L0.807451 12.1529C0.621665 12.3387 0.51646 12.5902 0.514584 12.8529L0.499938 14.9033C0.495608 15.5095 1.02733 15.9801 1.62852 15.9021L3.47666 15.6624C3.69677 15.6339 3.90113 15.5329 4.05755 15.3754Z" fill="#8E8E93" stroke="#8E8E93" stroke-linecap="round"/>-->
+<!--                            <path d="M15.2368 4.66603L11.7368 1.16603C11.7368 1.16603 13.7366 -0.333672 15.2368 1.16632C16.737 2.66632 15.2368 4.66603 15.2368 4.66603Z" fill="#8E8E93" stroke="#8E8E93" stroke-linecap="round"/>-->
+<!--                        </svg>-->
                     </div>
                     <div class="cart_item_control">
                         <div class="cart_item_control_price">{{ getProduct(product.id).priceDiscount !== 0 ? getProduct(product.id).priceDiscount : getProduct(product.id).price }}

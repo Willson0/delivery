@@ -306,7 +306,7 @@ button {
     position: fixed;
     right: 12px;
     width: calc(100vw - 24px);
-    bottom: 12px;
+    bottom: calc(env(safe-area-inset-bottom, 0) + 12px);
     box-sizing: border-box;
     -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
@@ -1533,7 +1533,8 @@ button {
 }
 .auth>button {
     position: fixed;
-    bottom: 15px;
+    /*bottom: 15px;*/
+    bottom: calc(env(safe-area-inset-bottom, 0) + 15px);
     left: 50%;
     transform: translateX(-50%);
     -webkit-border-radius: 33px;
@@ -1729,7 +1730,8 @@ button {
 }
 .accept>button {
     position: fixed;
-    bottom: 55px;
+    /*bottom: 55px;*/
+    bottom: calc(env(safe-area-inset-bottom, 0) + 55px);
     background: var(--gradient_button);
     -webkit-border-radius: 33px;
     -moz-border-radius: 33px;

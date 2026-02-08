@@ -158,22 +158,22 @@ export default {
             <div class="authMain_input" ref="phone" v-if="next === false">
                 <span>+ 7</span>
                 <div>
-                    <input @keydown="oninp" @focus="onfoc" v-for="el in 3" type="number" placeholder="0">
+                    <input inputmode="numeric" @keydown="oninp" @focus="onfoc" v-for="el in 3" type="number" placeholder="0">
                 </div>
                 <div>
-                    <input @keydown="oninp" @focus="onfoc" v-for="el in 3" type="number" placeholder="0">
+                    <input inputmode="numeric" @keydown="oninp" @focus="onfoc" v-for="el in 3" type="number" placeholder="0">
                 </div>
                 <div>
-                    <input @keydown="oninp" @focus="onfoc" v-for="el in 2" type="number" placeholder="0">
+                    <input inputmode="numeric" @keydown="oninp" @focus="onfoc" v-for="el in 2" type="number" placeholder="0">
                 </div>
                 <div>
-                    <input @keydown="oninp" @focus="onfoc" v-for="el in 2" type="number" placeholder="0">
+                    <input inputmode="numeric" @keydown="oninp" @focus="onfoc" v-for="el in 2" type="number" placeholder="0">
                 </div>
             </div>
             <div class="authMain_input code" ref="code" v-else>
                 <div v-for="bl in 1">
                     <div v-for="inp in 4">
-                        <input @keydown="oninp($event, true)" @focus="onfoc" type="number">
+                        <input inputmode="numeric" @keydown="oninp($event, true)" @focus="onfoc" type="number">
                         <div></div>
                     </div>
                 </div>
