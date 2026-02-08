@@ -30,7 +30,7 @@ export default {
                     address: this.$refs.addressComponent.getString(),
                     latitude: coords[0],
                     longitude: coords[1],
-                    commentAddress: this.$refs.addressComponent.getComment(),
+                    commentAddress: this.$refs.addressComponent.getComment() ?? "",
                 },
                 paymentType: 0,
             }).then((response) => {
