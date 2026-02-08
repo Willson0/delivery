@@ -98,7 +98,7 @@ export default {
                 notify("Успешно сохранено!", 0);
 
                 await axios.post(config.backend + "auth/update", {
-                    cart: Object.keys(newUser.addresses).length === 0 ? null : newUser.addresses,
+                    addresses: Object.keys(newUser.addresses).length === 0 ? null : newUser.addresses,
                     initData: window.Telegram.WebApp.initData,
                 }).then((response) => {
 
