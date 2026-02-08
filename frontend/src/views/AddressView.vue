@@ -71,6 +71,7 @@ export default {
             },icon);
             map.addChild(marker);
             const click = (object,event) => {
+                this.coords = [event.coordinates[0].toFixed(6), event.coordinates[1].toFixed(6)];
                 marker.update({
                     coordinates: event.coordinates
                 });

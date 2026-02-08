@@ -132,8 +132,8 @@ export default {
         <div>Загрузка...</div>
     </div>
     <div class="history">
-        <div class="history_null">
-            <div v-if="!history.length">Тут пока что ничего нет...</div>
+        <div v-if="!history.length" class="history_null">
+            <div>Тут пока что ничего нет...</div>
             <button @click="toLink('home')">Сделать заказ</button>
         </div>
         <div v-for="order in history">
