@@ -49,8 +49,8 @@ export default {
                 this.$refs.map,
                 {
                     location: {
-                        center: [37.588144, 55.733842],
-                        zoom: 15
+                        center: [53.195878, 50.100202],
+                        zoom: 100
                     }
                 }
             );
@@ -67,7 +67,7 @@ export default {
             icon.src = "/pizza.webp"
 
             const marker = new YMapMarker({
-                coordinates: [37.588144, 55.733842]
+                coordinates: [53.195878, 50.100202]
             },icon);
             map.addChild(marker);
             const click = (object,event) => {
