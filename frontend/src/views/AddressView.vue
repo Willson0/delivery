@@ -129,10 +129,10 @@ export default {
                     if (c.kind === "street") street = c.name;
                     if (c.kind === "house") house = c.name;
                 }
-                if (!city || !street || !house) this.address.address = "";
-                else this.address.address = city + ", " + street + ", " + house;
+                if (!city || !street || !house) this.$refs.addressComponent.address.address = "";
+                else this.$refs.addressComponent.address.address = city + ", " + street + ", " + house;
             } catch (e) {
-                this.address.address = "";
+                this.$refs.addressComponent.address.address = "";
             }
         },
         async save () {
