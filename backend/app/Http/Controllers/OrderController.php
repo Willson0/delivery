@@ -27,6 +27,7 @@ class OrderController extends Controller
         $data = $request->validated();
         $reqData = $data["address"];
         $reqData["paymentType"] = $data["paymentType"];
+        if (!$reqData["commentAddress"]) $reqData["commentAddress"] = "";
 
         $cache = Cache::get("data");
         if (!$cache) {
