@@ -99,6 +99,7 @@ export default {
 
                 await axios.post(config.backend + "auth/update", {
                     addresses: Object.keys(newUser.addresses).length === 0 ? null : newUser.addresses,
+                    address: Object.keys(newUser.addresses).length - 1,
                     initData: window.Telegram.WebApp.initData,
                 }).then((response) => {
 

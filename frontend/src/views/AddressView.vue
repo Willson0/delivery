@@ -137,6 +137,7 @@ export default {
         },
         async save () {
             this.$refs.addressComponent.checkAddress(this.coords[0], this.coords[1]);
+            this.closeMapOverlay();
         },
         async changeAddress (key) {
             let newUser = {...this.user};
