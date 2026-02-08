@@ -164,7 +164,7 @@ export default {
 
 <template>
     <div class="address">
-        <div v-for="(address, key) in user.addresses" @click="changeAddress(key)" :class="{active: user.address === key}">
+        <div :key="user.address" v-for="(address, key) in user.addresses" @click="changeAddress(key)" :class="{active: user.address === key}">
             <div class="address_checkbox"></div>
             <div class="address_text">{{ address.address }}</div>
 <!--            <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">-->

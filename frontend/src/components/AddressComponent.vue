@@ -51,7 +51,7 @@ export default {
                 this.address = this.user.addresses[this.user.address];
                 this.address.comment = this.user.addresses[this.user.address].commentAddress;
 
-                this.coords = [this.user.address.latitude, this.user.address.longitude];
+                this.coords = [this.user.addresses[this.user.address].latitude, this.user.addresses[this.user.address].longitude];
             }
         },
         async checkAddress (latitude, longitude) {
@@ -95,7 +95,7 @@ export default {
                     longitude: longitude,
                     commentAddress: this.address.comment,
                 });
-                newUser.address = Object.keys(newUser.addresses).length;
+                newUser.address = Object.keys(newUser.addresses).length-1;
 
                 this.$store.dispatch("updateUser", newUser);
                 notify("Успешно сохранено!", 0);
