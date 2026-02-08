@@ -120,6 +120,11 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/tijsverkoyen/css-to-inline-styles" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/vlucas/phpdotenv" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/voku/portable-ascii" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/public/storage" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/storage/app/public/ad" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/storage/app/public/ads" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/storage/app/public/posts" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
