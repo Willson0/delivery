@@ -82,7 +82,7 @@ class AuthController extends Controller
                 'Authentication' => env("INTERNAL_TOKEN"),
             ])->post("https://kfsamara.ru/api/users/add", [
                 "data" => [
-                    "name" => $request["initData"]["user"]["first_name"] + $request["initData"]["user"]["last_name"],
+                    "name" => $request["initData"]["user"]["first_name"] . $request["initData"]["user"]["last_name"],
                     "phone" => $request->phone, // todo: check correct number
                     "type" => 2,
                     "status" => 0,
