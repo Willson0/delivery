@@ -26,7 +26,7 @@ class OrderCreateRequest extends FormRequest
             "address.address" => "required|string",
             "address.latitude" => "required|numeric",
             "address.longitude" => "required|numeric",
-            "address.commentAddress" => "required|string",
+            "address.commentAddress" => "required|string|min:0",
 
             "paymentType" => "required|boolean",
         ];
