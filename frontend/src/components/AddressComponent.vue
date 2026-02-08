@@ -93,7 +93,7 @@ export default {
                     flat: this.address.flat,
                     latitude: latitude,
                     longitude: longitude,
-                    commentAddress: this.address.comment,
+                    commentAddress: this.address.comment ?? '',
                 });
                 newUser.address = Object.keys(newUser.addresses).length-1;
 
