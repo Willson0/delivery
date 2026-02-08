@@ -99,7 +99,11 @@ class OrderController extends Controller
         $backendRequest = Http::withHeaders([
             'Authentication' => env("INTERNAL_TOKEN"),
         ])->post("https://kfsamara.ru/api/orders/create", $req);
+
         if ($backendRequest->status() !== 200) {
+            if ($backendRequest->json()["code"] === 3)
+                abort(400, "KFSamara доставка сегодня уже не работает!");
+
             Log::critical($backendRequest->json());
             abort(400, "Ошибка на стороне сервера!");
         }
