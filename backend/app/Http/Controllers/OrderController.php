@@ -99,6 +99,10 @@ class OrderController extends Controller
         $backendRequest = Http::withHeaders([
             'Authentication' => env("INTERNAL_TOKEN"),
         ])->post("https://kfsamara.ru/api/orders/create", $req);
+        if ($backendRequest->status() !== 200) {
+            Log::critical($backendRequest->json());
+            abort(400, "Ошибка на стороне сервера!");
+        }
         $data = $backendRequest->json()["data"];
 
         $plusBonus = $rublesSum * (Setting::where("key", "bonusPercent")->first()->value / 100);
