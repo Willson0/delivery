@@ -1137,6 +1137,17 @@ button {
     gap: 20px;
     padding: 30px 12px;
 }
+.history_null {
+    background: transparent !important;
+    text-align: center;
+}
+.history_null>button {
+    background-color: var(--addiction);
+    border-radius: 10px;
+    max-width: 60vw;
+    margin: 0 auto;
+    margin-top: 10px;
+}
 .history>div {
     padding: 0 10px;
     display: flex;
@@ -1454,13 +1465,14 @@ button {
     text-align: right;
     max-width: 14px;
     margin-bottom: 2px;
+    transition: background var(--transition);
 }
 .authMain_input>div input:focus {
     margin-bottom: 0;
     box-sizing: border-box;
     border-bottom: 2px solid var(--text);
 }
-.authMain_input>div>div input {
+.authMain_input>div>div input:focus {
     background: rgba(128, 128, 128, 0.19) !important;
 }
 .authMain_input>div>div {

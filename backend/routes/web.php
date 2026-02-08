@@ -9,6 +9,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\StatsController;
+use App\Http\Controllers\WebhookController;
 use App\Http\Middleware\CheckAdminMiddleware;
 use App\Http\Middleware\CheckTelegram;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,10 @@ Route::group(["prefix" => "api"], function () {
         Route::post("/", [OrderController::class, "create"]);
         Route::post("/{id}", [OrderController::class, "get"]);
         Route::post("/{id}/cancel", [OrderController::class, "delete"]);
+    });
+
+    Route::group(["prefix" => "webhook"], function () {
+        Route::post("/tg", [WebhookController::class, 'tg']);
     });
 
     // ADMIN

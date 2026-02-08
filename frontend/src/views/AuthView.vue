@@ -15,12 +15,24 @@ export default {
             isLoading: false,
         }
     },
+    mounted () {
+    },
     methods: {
+        onfoc (ev) {
+            let inputs = ev.target.closest('.authMain_input').querySelectorAll('input');
+
+            let string = "";
+            inputs.forEach((inp) => string += inp.value);
+            if (string.length === 0) inputs[0].focus();
+        },
         oninp (ev, iscode = false) {
             let target = iscode ? ev.target.parentNode : ev.target;
 
             ev.preventDefault();
-            if (ev.key === 'Enter') return this.nextButton();
+            if (ev.key === 'Enter') {
+                if (this.agree === false) return this.agree = true;
+                return this.nextButton();
+            }
             else if (ev.key >= '0' && ev.key <= '9') {
                 ev.target.value = ev.key;
                 this.nextFocus(target, iscode);
@@ -112,8 +124,11 @@ export default {
 
                 notify("Успешная авторизация!");
                 this.$emit("logged");
-            }).catch((error) => notify(whatError(error)))
-                .finally(() => this.isLoading = false);
+            }).catch((error) => {
+                notify(whatError(error), 1);
+                this.$refs.code.querySelectorAll('input').forEach(el => el.value = "");
+                this.$refs.code.querySelectorAll('input')[0].focus();
+            }).finally(() => this.isLoading = false);
         },
         nextButton () {
             return this.isReady ? (!this.next ? this.sendCode() : this.checkCode()) : null
@@ -143,22 +158,22 @@ export default {
             <div class="authMain_input" ref="phone" v-if="next === false">
                 <span>+ 7</span>
                 <div>
-                    <input @keydown="oninp" v-for="el in 3" type="number" placeholder="0">
+                    <input @keydown="oninp" @focus="onfoc" v-for="el in 3" type="number" placeholder="0">
                 </div>
                 <div>
-                    <input @keydown="oninp" v-for="el in 3" type="number" placeholder="0">
+                    <input @keydown="oninp" @focus="onfoc" v-for="el in 3" type="number" placeholder="0">
                 </div>
                 <div>
-                    <input @keydown="oninp" v-for="el in 2" type="number" placeholder="0">
+                    <input @keydown="oninp" @focus="onfoc" v-for="el in 2" type="number" placeholder="0">
                 </div>
                 <div>
-                    <input @keydown="oninp" v-for="el in 2" type="number" placeholder="0">
+                    <input @keydown="oninp" @focus="onfoc" v-for="el in 2" type="number" placeholder="0">
                 </div>
             </div>
             <div class="authMain_input code" ref="code" v-else>
                 <div v-for="bl in 1">
                     <div v-for="inp in 4">
-                        <input @keydown="oninp($event, true)" type="number">
+                        <input @keydown="oninp($event, true)" @focus="onfoc" type="number">
                         <div></div>
                     </div>
                 </div>

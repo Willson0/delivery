@@ -36,6 +36,7 @@ export default {
         }).catch((error) => notify(whatError(error), 1))
     },
     methods: {
+        toLink,
         closeCart,
         openCart,
         addToCart,
@@ -127,8 +128,14 @@ export default {
         <cart-view @close="closeCart()"/>
     </div>
 
-    <div class="loading historyLoading"></div>
+    <div class="loading historyLoading">
+        <div>Загрузка...</div>
+    </div>
     <div class="history">
+        <div class="history_null">
+            <div v-if="!history.length">Тут пока что ничего нет...</div>
+            <button @click="toLink('home')">Сделать заказ</button>
+        </div>
         <div v-for="order in history">
             <div class="history_date">{{ unixToPrettyDate(order.dateCreate) }}</div>
             <hr>
