@@ -23,7 +23,8 @@ class WebhookController extends Controller
             $text = $message->getText();
             if (strpos($text, '/start') === 0) {
                 $text = "*Добро пожаловать в наш бот! 👋*
-Самара";
+
+Добро пожаловать в KFSamara! Вкуснейшая еда с быстрой доставкой на дом по Самаре. Заказывайте легко и наслаждайтесь любимыми блюдами уже сегодня!";
                 $escape_chars = ['[', ']', '(', ')', '#', '+', '-', '=', '|', '{', '}', '.', '!'];
                 foreach ($escape_chars as $char) {
                     $text = str_replace($char, '\\' . $char, $text);
