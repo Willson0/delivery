@@ -46,7 +46,8 @@ export default {
             return this.coords;
         },
         loadAddress () {
-            if (this.userSelected && this.user.address && this.user.addresses[this.user.address]) {
+            if (!this.user.id) return;
+            if (this.userSelected && this.user.address != null && this.user.addresses[this.user.address]) {
                 this.address = this.user.addresses[this.user.address];
                 this.address.comment = this.user.addresses[this.user.address].commentAddress;
 
@@ -93,9 +94,11 @@ export default {
                     longitude: longitude,
                     commentAddress: this.address.comment,
                 });
+                newUser.address = Object.keys(newUser.addresses).length;
 
                 this.$store.dispatch("updateUser", newUser);
                 notify("Успешно сохранено!", 0);
+                this.$emit('close');
 
                 await axios.post(config.backend + "auth/update", {
                     addresses: Object.keys(newUser.addresses).length === 0 ? null : newUser.addresses,

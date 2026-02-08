@@ -137,7 +137,6 @@ export default {
         },
         async save () {
             this.$refs.addressComponent.checkAddress(this.coords[0], this.coords[1]);
-            this.closeMapOverlay();
         },
         async changeAddress (key) {
             let newUser = {...this.user};
@@ -182,7 +181,7 @@ export default {
     <div class="address_adding_overlay" style="display: none">
         <div ref="map" class="yandex-map"></div>
         <div class="address_adding_overlay_footer">
-            <address-component ref="addressComponent" v-model="address"/>
+            <address-component @close="closeMapOverlay" ref="addressComponent" v-model="address"/>
             <div class="address_adding_overlay_footer_buttons">
                 <button @click="closeMapOverlay" class="inactive">Удалить</button>
                 <button @click="save">Сохранить</button>
