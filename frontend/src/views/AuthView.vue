@@ -20,7 +20,8 @@ export default {
             let target = iscode ? ev.target.parentNode : ev.target;
 
             ev.preventDefault();
-            if (ev.key >= '0' && ev.key <= '9') {
+            if (ev.key === 'Enter') return this.nextButton();
+            else if (ev.key >= '0' && ev.key <= '9') {
                 ev.target.value = ev.key;
                 this.nextFocus(target, iscode);
             } else if (ev.key === "ArrowRight") this.nextFocus(target, iscode);
@@ -113,6 +114,9 @@ export default {
                 this.$emit("logged");
             }).catch((error) => notify(whatError(error)))
                 .finally(() => this.isLoading = false);
+        },
+        nextButton () {
+            return this.isReady ? (!this.next ? this.sendCode() : this.checkCode()) : null
         }
     },
     computed: {
@@ -168,7 +172,7 @@ export default {
                 <div class="authMain_approval_text">Соглашаюсь на <a>Политику конфиденциальности</a></div>
             </div>
         </div>
-        <button @click="isReady ? (!next ? sendCode() : checkCode()) : null" :class="{active: isReady}">Далее</button>
+        <button @click="nextButton" :class="{active: isReady}">Далее</button>
     </div>
 </template>
 

@@ -1460,6 +1460,9 @@ button {
     box-sizing: border-box;
     border-bottom: 2px solid var(--text);
 }
+.authMain_input>div>div input {
+    background: rgba(128, 128, 128, 0.19) !important;
+}
 .authMain_input>div>div {
     position: relative;
 }
