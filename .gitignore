@@ -1,3 +1,6 @@
 docker-compose.yml
 php/Dockerfile
 nginx/default.conf
+
+./php/Dockerfile
+./nginx/default.conf
