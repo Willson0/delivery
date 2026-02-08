@@ -129,10 +129,10 @@ export default {
                     if (c.kind === "street") street = c.name;
                     if (c.kind === "house") house = c.name;
                 }
-                if (!city || !street || !house) mapInputSearch.value = "";
-                else mapInputSearch.value = city + ", " + street + ", " + house;
+                if (!city || !street || !house) this.address.address.value = "";
+                else this.address.address.value = city + ", " + street + ", " + house;
             } catch (e) {
-                mapInputSearch.value = "";
+                this.address.address.value = "";
             }
         },
         async save () {
