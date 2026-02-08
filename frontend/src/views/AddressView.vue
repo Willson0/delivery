@@ -50,7 +50,7 @@ export default {
                 {
                     location: {
                         center: [53.195878, 50.100202],
-                        zoom: 100
+                        zoom: 10
                     }
                 }
             );
