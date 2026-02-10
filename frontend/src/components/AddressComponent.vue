@@ -187,11 +187,10 @@ export default {
                     console.log(result);
                     this.variables = result.filter(a => a.value.includes('Самара'));
                     console.log(this.variables);
-
-                    // this.$refs.addressSelect.focus();
                 } catch (e) {
                     this.variables = [];
                 }
+                requestAnimationFrame(() => this.$refs.addressSelect.focus())
             }
         }
     },
