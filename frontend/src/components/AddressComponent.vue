@@ -53,14 +53,14 @@ export default {
                 const feature = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
                 if (!feature) {
                     notify('Ошибка Yandex Maps', 1);
-                    return [];
+                    return this.coords;
                 }
 
                 const components = feature.metaDataProperty.GeocoderMetaData.Address.Components;
                 const area = components.find(c => c.kind === "area")?.name;
                 if (area !== 'городской округ Самара') {
                     notify("Доставка только по Самаре!", 1)
-                    return [];
+                    return this.coords;
                 }
 
                 const pos = feature.Point.pos;
