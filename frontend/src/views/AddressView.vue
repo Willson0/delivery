@@ -88,28 +88,26 @@ export default {
             map.addChild(mapListener);
 
             mapInputSearch.addEventListener("keydown", (event) => {
-                if(event.keyCode === 13){
-                    ymaps3.search({
-                        'text': "Самара, " + mapInputSearch.value
-                    }).then((res) => {
-                        let center_update = res[0].geometry.coordinates;
-                        map.update({
-                            location: {
-                                center: center_update,
-                                zoom: 15,
-                                duration: 400
-                            }
-                        });
+                ymaps3.search({
+                    'text': "Самара, " + mapInputSearch.value
+                }).then((res) => {
+                    let center_update = res[0].geometry.coordinates;
+                    map.update({
+                        location: {
+                            center: center_update,
+                            zoom: 15,
+                            duration: 400
+                        }
+                    });
 
-                        marker.update({
-                            coordinates:center_update
-                        });
+                    marker.update({
+                        coordinates:center_update
+                    });
 
-                        console.log(center_update);
-                        this.coords = center_update;
-                        this.geocodeYandex(center_update[0], center_update[1])
-                    })
-                }
+                    console.log(center_update);
+                    this.coords = center_update;
+                    this.geocodeYandex(center_update[0], center_update[1])
+                })
             });
         },
         async geocodeYandex(lng, lat) {
