@@ -215,11 +215,11 @@ export default {
 <template>
     <div class="addressComponent">
         <div>
-            <div>
+            <div style="position: relative;">
                 <label for="">Город, улица и дом</label>
                 <input type="text" id="address" @input="oninp" v-model="address.address" placeholder="Адрес">
                 {{variables.length}}
-                <select ref="addressSelect" v-model="selectedAddress" style="z-index: -1; opacity: 0" v-if="variables.length" name="" id="">
+                <select ref="addressSelect" v-model="selectedAddress" style="z-index: -1; opacity: 0; position: absolute; bottom: 0;" v-if="variables.length" name="" id="">
                     <option v-for="v in variables" :value="v.value">{{v.value}}</option>
                 </select>
             </div>
