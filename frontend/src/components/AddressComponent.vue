@@ -12,6 +12,8 @@ export default {
                 floor: "", flat: "", comment: "",
             },
             coords: [],
+            variables: [],
+            selectedAddress: '',
         }
     },
     async mounted () {
@@ -172,6 +174,21 @@ export default {
                     notify(whatError(error),1);
                 })
             }
+        },
+        async oninp (event) {
+            let input = event.target;
+            const value = input.value.trim();
+            if (value.length < 3) return this.variables = [];
+
+            const query = 'Самара, ' + value;
+            if (window.ymaps3?.suggest) {
+                try {
+                    const result = await ymaps3.suggest({ text: query, results: 5 });
+                    this.variables = result.filter(a => a.title.includes('Самара'));
+                } catch (e) {
+                    this.variables = [];
+                }
+            }
         }
     },
     computed: {
@@ -182,6 +199,11 @@ export default {
     watch: {
         user () {
             this.loadAddress();
+        },
+        selectedAddress () {
+            this.variables = [];
+            this.address.address = this.selectedAddress;
+            this.selectedAddress = '';
         }
     }
 }
@@ -192,7 +214,10 @@ export default {
         <div>
             <div>
                 <label for="">Город, улица и дом</label>
-                <input type="text" id="address" v-model="address.address" placeholder="Адрес">
+                <input type="text" id="address" @input="oninp" v-model="address.address" placeholder="Адрес">
+                <select v-model="selectedAddress" style="z-index: -1; opacity: 0" v-if="variables.length > 0" name="" id="">
+                    <option v-for="v in variables" :value="v">{{v}}</option>
+                </select>
             </div>
         </div>
         <div>
