@@ -66,7 +66,7 @@ export default {
         loadAddress () {
             if (!this.user.id) return;
             if (this.userSelected && this.user.address != null && this.user.addresses[this.user.address]) {
-                this.address = this.user.addresses[this.user.address];
+                this.address = {...this.user.addresses[this.user.address]};
                 this.address.comment = this.user.addresses[this.user.address].commentAddress;
 
                 this.coords = [this.user.addresses[this.user.address].latitude, this.user.addresses[this.user.address].longitude];
