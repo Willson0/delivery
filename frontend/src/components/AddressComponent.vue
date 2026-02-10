@@ -35,6 +35,9 @@ export default {
             return this.address.comment;
         },
         getCoords () {
+            console.log(this.address.address);
+            console.log(this.user.addresses[this.user.address].address);
+
             if (this.coords.length > 0 && this.address.address === this.user.addresses[this.user.address].address) return this.coords;
             if (!window.ymaps3?.ready) notify('Ошибка Yandex Maps', 1);
 
