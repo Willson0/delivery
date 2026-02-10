@@ -188,7 +188,7 @@ export default {
                     this.variables = result.filter(a => a.value.includes('Самара'));
                     console.log(this.variables);
 
-                    this.$refs.addressSelect.focus();
+                    // this.$refs.addressSelect.focus();
                 } catch (e) {
                     this.variables = [];
                 }
