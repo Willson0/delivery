@@ -66,6 +66,15 @@ export default {
                 const pos = feature.Point.pos;
                 const [lonStr, latStr] = pos.split(" ");
                 this.coords = [parseFloat(latStr), parseFloat(lonStr)];
+
+                let city, street, house;
+                for (const c of components) {
+                    if (c.kind === "locality") city = c.name;
+                    if (c.kind === "street") street = c.name;
+                    if (c.kind === "house") house = c.name;
+                }
+                if (!city || !street || !house) this.address.address = "";
+                else this.address.address = city + ", " + street + ", " + house;
             } catch (e) {
                 console.log(e);
             }
