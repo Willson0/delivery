@@ -34,7 +34,7 @@ export default {
         getComment () {
             return this.address.comment;
         },
-        getCoords () {
+        async getCoords () {
             console.log(this.address.address);
             console.log(this.user.addresses[this.user.address].address);
 
@@ -48,8 +48,8 @@ export default {
             const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&geocode=${adr}&format=json`;
 
             try {
-                const resp = fetch(url);
-                const data = resp.json();
+                const resp = await fetch(url);
+                const data = await resp.json();
                 const feature = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
                 if (!feature) return notify('Ошибка Yandex Maps', 1);
 
