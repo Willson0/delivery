@@ -1168,7 +1168,8 @@ button {
     z-index: 999999;
     display: flex;
     flex-direction: column;
-    background: var(--grey)
+    background: var(--grey);
+    left: 0;
 }
 .address_variables>div {
     box-sizing: border-box;

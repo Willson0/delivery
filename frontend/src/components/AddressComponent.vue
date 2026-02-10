@@ -184,14 +184,15 @@ export default {
             if (window.ymaps3?.suggest) {
                 try {
                     const result = await ymaps3.suggest({ text: query, results: 5 });
-                    console.log(result);
                     this.variables = result.filter(a => a.value.includes('Самара'));
-                    console.log(this.variables);
+                    window.addEventListener('click', this.oncl);
                 } catch (e) {
                     // this.variables = [];
                 }
-                requestAnimationFrame(() => this.$refs.addressSelect.focus())
             }
+        },
+        oncl (event) {
+            if (!event.target.closest('.address_variables')) this.variables = [];
         }
     },
     computed: {
@@ -204,9 +205,8 @@ export default {
             this.loadAddress();
         },
         selectedAddress () {
-            this.variables = [];
             this.address.address = this.selectedAddress;
-            this.selectedAddress = '';
+            this.variables = [];
         }
     }
 }
@@ -218,7 +218,6 @@ export default {
             <div style="position: relative;">
                 <label for="">Город, улица и дом</label>
                 <input type="text" id="address" @input="oninp" v-model="address.address" placeholder="Адрес">
-                {{variables.length}}
                 <div class="address_variables" v-if="variables.length">
                     <div @click="selectedAddress = v.value" v-for="v in variables">{{v.value}}</div>
                 </div>
