@@ -60,7 +60,9 @@ export default {
                 const pos = feature.Point.pos;
                 const [lonStr, latStr] = pos.split(" ");
                 this.coords = [parseFloat(latStr), parseFloat(lonStr)];
-            } catch (e) {}
+            } catch (e) {
+                console.log(e);
+            }
             return this.coords;
         },
         loadAddress () {
