@@ -63,18 +63,22 @@ export default {
                     return this.coords;
                 }
 
-                const pos = feature.Point.pos;
-                const [lonStr, latStr] = pos.split(" ");
-                this.coords = [parseFloat(latStr), parseFloat(lonStr)];
-
                 let city, street, house;
                 for (const c of components) {
                     if (c.kind === "locality") city = c.name;
                     if (c.kind === "street") street = c.name;
                     if (c.kind === "house") house = c.name;
                 }
-                if (!city || !street || !house) this.address.address = "";
+                if (!city || !street || !house) {
+                    notify('Неправильный адрес', 1);
+                    this.address.address = "";
+                    return this.coords;
+                }
                 else this.address.address = city + ", " + street + ", " + house;
+
+                const pos = feature.Point.pos;
+                const [lonStr, latStr] = pos.split(" ");
+                this.coords = [parseFloat(latStr), parseFloat(lonStr)];
             } catch (e) {
                 console.log(e);
             }
