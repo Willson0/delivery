@@ -12,9 +12,6 @@ export default {
             address: {},
             selected: 0,
             coords: [],
-
-            map: {},
-            marker: {},
         }
     },
     async mounted () {
