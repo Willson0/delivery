@@ -24,7 +24,7 @@ export default {
 
             this.isLoading = true;
 
-            let coords = this.$refs.addressComponent.getCoords();
+            let coords = await this.$refs.addressComponent.getCoords();
             console.log(coords);
             if (coords == null || coords.length === 0) return this.isLoading = false;
 
