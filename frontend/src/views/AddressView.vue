@@ -160,7 +160,6 @@ export default {
             }
         },
         async save () {
-            this.updateMarker();
             this.$refs.addressComponent.checkAddress(this.coords[0], this.coords[1]);
         },
         async changeAddress (key) {

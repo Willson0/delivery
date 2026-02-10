@@ -115,6 +115,8 @@ export default {
                 }
             } catch (e) {}
 
+            this.$emit('updateMarker');
+
             let rules = [
                 ["address", this.address.address.length > 5],
                 ["door", /^(?:0|[1-9][0-9]*)$/.test(this.address.door)],
