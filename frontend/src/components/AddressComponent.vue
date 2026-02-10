@@ -51,11 +51,17 @@ export default {
                 const resp = await fetch(url);
                 const data = await resp.json();
                 const feature = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
-                if (!feature) return notify('Ошибка Yandex Maps', 1);
+                if (!feature) {
+                    notify('Ошибка Yandex Maps', 1);
+                    return [];
+                }
 
                 const components = feature.metaDataProperty.GeocoderMetaData.Address.Components;
                 const area = components.find(c => c.kind === "area")?.name;
-                if (area !== 'городской округ Самара') return notify("Доставка только по Самаре!", 1)
+                if (area !== 'городской округ Самара') {
+                    notify("Доставка только по Самаре!", 1)
+                    return [];
+                }
 
                 const pos = feature.Point.pos;
                 const [lonStr, latStr] = pos.split(" ");
