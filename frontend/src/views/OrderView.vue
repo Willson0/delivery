@@ -24,6 +24,7 @@ export default {
 
             this.isLoading = true;
             let coords = this.$refs.addressComponent.getCoords();
+            if (coords.length === 0) return;
             await axios.post(config.backend + "order", {
                 initData: window.Telegram.WebApp.initData,
                 address: {

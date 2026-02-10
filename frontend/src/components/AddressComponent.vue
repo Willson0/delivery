@@ -35,8 +35,10 @@ export default {
             return this.address.comment;
         },
         getCoords () {
-            if (this.coords.length > 0) return this.coords;
+            if (this.coords.length > 0 && this.address.address === this.user.addresses[this.user.address].address) return this.coords;
             if (!window.ymaps3?.ready) notify('Ошибка Yandex Maps', 1);
+
+            this.coords = [];
 
             const apiKey = '72462881-8725-458b-ab67-3676c9c9ca7b';
             const adr = "Самара. " + this.address.address;
