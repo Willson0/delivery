@@ -68,7 +68,7 @@ class AuthController extends Controller
         $data = $request->validated();
         $user->update($data);
 
-        if ($request->has("addresses")) utils::addData($user, "count_product", 1);
+        if ($request->has("addresses")) utils::addData($user, "count_address", 1);
 
         return response()->json("ok");
     }
