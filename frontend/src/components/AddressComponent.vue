@@ -68,7 +68,10 @@ export default {
             }
         },
         async checkAddress (latitude, longitude) {
-            if (latitude == null || longitude == null) return console.log("Undefined latitude or longitude")
+            if (latitude == null || longitude == null) {
+                notify("Не выбрана точка", 1);
+                return console.log("Undefined latitude or longitude")
+            }
             let rules = [
                 ["address", this.address.address.length > 5],
                 ["door", /^(?:0|[1-9][0-9]*)$/.test(this.address.door)],
