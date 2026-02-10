@@ -124,6 +124,9 @@ export default {
                 if (!feature) return null;
 
                 const components = feature.metaDataProperty.GeocoderMetaData.Address.Components;
+                const area = components.find(c => c.kind === "area")?.name;
+                if (area !== 'городской округ Самара') return notify("Доставка только по Самаре!", 1)
+
                 let city, street, house;
                 for (const c of components) {
                     if (c.kind === "locality") city = c.name;

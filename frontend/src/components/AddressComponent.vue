@@ -38,11 +38,24 @@ export default {
             if (this.coords.length > 0) return this.coords;
             if (!window.ymaps3?.ready) notify('Ошибка Yandex Maps', 1);
 
-            ymaps3.search({
-                'text': "Самара. " + this.address.address,
-            }).then((res) => {
-                this.coords = res[0].geometry.coordinates;
-            });
+            const apiKey = '72462881-8725-458b-ab67-3676c9c9ca7b';
+            const adr = "Самара. " + this.address.address;
+            const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&geocode=${adr}&format=json`;
+
+            try {
+                const resp = fetch(url);
+                const data = resp.json();
+                const feature = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
+                if (!feature) return notify('Ошибка Yandex Maps', 1);
+
+                const components = feature.metaDataProperty.GeocoderMetaData.Address.Components;
+                const area = components.find(c => c.kind === "area")?.name;
+                if (area !== 'городской округ Самара') return notify("Доставка только по Самаре!", 1)
+
+                const pos = feature.Point.pos;
+                const [lonStr, latStr] = pos.split(" ");
+                this.coords = [parseFloat(latStr), parseFloat(lonStr)];
+            } catch (e) {}
             return this.coords;
         },
         loadAddress () {
