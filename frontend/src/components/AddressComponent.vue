@@ -207,7 +207,10 @@ export default {
         selectedAddress () {
             this.address.address = this.selectedAddress;
             this.variables = [];
-            this.$emit('updateMarker');
+
+            requestAnimationFrame(() => {
+                this.$emit('updateMarker');
+            })
         }
     }
 }
