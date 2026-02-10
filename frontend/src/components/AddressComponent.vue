@@ -184,8 +184,8 @@ export default {
             if (window.ymaps3?.suggest) {
                 try {
                     const result = await ymaps3.suggest({ text: query, results: 5 });
-                    console.log(result);
-                    this.variables = result.filter(a => a.title.includes('Самара'));
+                    this.variables = result.filter(a => a.value.includes('Самара'));
+                    this.$refs.addressSelect.focus();
                 } catch (e) {
                     this.variables = [];
                 }
@@ -216,8 +216,8 @@ export default {
             <div>
                 <label for="">Город, улица и дом</label>
                 <input type="text" id="address" @input="oninp" v-model="address.address" placeholder="Адрес">
-                <select v-model="selectedAddress" style="z-index: -1; opacity: 0" v-if="variables.length > 0" name="" id="">
-                    <option v-for="v in variables" :value="v">{{v}}</option>
+                <select ref="addressSelect" v-model="selectedAddress" style="z-index: -1; opacity: 0" v-if="variables.length > 0" name="" id="">
+                    <option v-for="v in variables" :value="v.value">{{v.value}}</option>
                 </select>
             </div>
         </div>
