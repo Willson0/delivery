@@ -85,7 +85,7 @@ export default {
     <teleport to="body">
         <div ref="productBackground" style="display: none" class="productBackground background"></div>
         <div ref="productView" style="display: none; max-width: 0">
-            <product-view :product="product"/>
+            <product-view @close="closeProduct" :product="product"/>
         </div>
     </teleport>
     <div class="product" v-if="!onlyImage" @click="clickable ? openProduct() : null">

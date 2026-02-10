@@ -96,6 +96,7 @@ export default {
                 }
             });
         },
+
         updateMarker () {
             const mapInputSearch = document.querySelector('.addressComponent>div>div>input');
             window.ymaps3.search({
@@ -124,6 +125,8 @@ export default {
             const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&geocode=${lng},${lat}&format=json`;
             const mapInputSearch = document.querySelector('.addressComponent>div>div>input');
 
+            if (this.samaraNotifyBlocked === undefined) this.samaraNotifyBlocked = false;
+
             try {
                 const resp = await fetch(url);
                 const data = await resp.json();
@@ -133,10 +136,14 @@ export default {
                 const components = feature.metaDataProperty.GeocoderMetaData.Address.Components;
                 const area = components.find(c => c.kind === "area")?.name;
                 if (area !== 'городской округ Самара') {
-                    clearTimeout(this.notifyTimeout);
-                    this.notifyTimeout = setTimeout(() => {
-                        return notify("Доставка только по Самаре!", 1);
-                    }, 1000);
+                    if (!this.samaraNotifyBlocked) {
+                        notify("Доставка только по Самаре!", 1);
+                        this.samaraNotifyBlocked = true;
+                        clearTimeout(this.samaraNotifyTime);
+                        this.samaraNotifyTime = setTimeout(() => {
+                            this.samaraNotifyBlocked = false;
+                        }, 5000);
+                    }
                 }
 
                 let city, street, house;

@@ -17,7 +17,10 @@ export default {
         }
     },
     methods: {
-        addToCart,
+        addToCart (id) {
+            this.$emit('close');
+            addToCart(id);
+        },
         openOverlay,
         openInfo () {
             return;
