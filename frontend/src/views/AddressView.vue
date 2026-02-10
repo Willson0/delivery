@@ -12,6 +12,8 @@ export default {
             address: {},
             selected: 0,
             coords: [],
+
+            notifyTimeout: null,
         }
     },
     async mounted () {
@@ -131,8 +133,10 @@ export default {
                 const components = feature.metaDataProperty.GeocoderMetaData.Address.Components;
                 const area = components.find(c => c.kind === "area")?.name;
                 if (area !== 'городской округ Самара') {
-                    this.coords = [];
-                    return notify("Доставка только по Самаре!", 1)
+                    clearTimeout(this.notifyTimeout);
+                    this.notifyTimeout = setTimeout(() => {
+                        return notify("Доставка только по Самаре!", 1);
+                    }, 1000);
                 }
 
                 let city, street, house;
