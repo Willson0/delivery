@@ -97,7 +97,6 @@ class AuthController extends Controller
                     "type" => 2,
                     "status" => 0,
                     "password" => 1,
-                    "pinned_achievements" => json_encode([]),
                 ]
             ]);
             if ($req->status() !== 200) {
@@ -172,6 +171,7 @@ class AuthController extends Controller
         else User::create([
             "id" => $userId,
             "telegram_id" => $request["initData"]["user"]["id"],
+            "pinned_achievements" => json_encode([]),
         ]);
         return $this->profile($request);
     }
