@@ -13,8 +13,8 @@ export default {
             selected: 0,
             coords: [],
 
-            map: null,
-            marker: null,
+            map: {},
+            marker: {},
         }
     },
     async mounted () {
