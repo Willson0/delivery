@@ -48,7 +48,7 @@ export default {
             const mapInputSearch = document.querySelector('.addressComponent>div>div>input');
             const {YMap, YMapDefaultSchemeLayer, YMapListener, YMapMarker, YMapDefaultFeaturesLayer} = window.ymaps3;
 
-            const map = new YMap(
+            this.map = new YMap(
                 this.$refs.map,
                 {
                     location: {
@@ -58,8 +58,8 @@ export default {
                 }
             );
 
-            map.addChild(new YMapDefaultSchemeLayer());
-            map.addChild(new YMapDefaultFeaturesLayer());
+            this.map.addChild(new YMapDefaultSchemeLayer());
+            this.map.addChild(new YMapDefaultFeaturesLayer());
 
             const icon = document.createElement('img');
             icon.className = 'marker';
@@ -69,17 +69,14 @@ export default {
             icon.style.transform = "translate(-50%, -50%)"
             icon.src = "/pizza.webp"
 
-            const marker = new YMapMarker({
+            this.marker = new YMapMarker({
                 coordinates: [50.100202, 53.195878]
             },icon);
-            map.addChild(marker);
-
-            this.map = map;
-            this.marker = marker;
+            this.map.addChild(this.marker);
 
             const click = (object,event) => {
                 this.coords = [event.coordinates[0].toFixed(6), event.coordinates[1].toFixed(6)];
-                marker.update({
+                this.marker.update({
                     coordinates: event.coordinates
                 });
                 this.geocodeYandex(
@@ -92,7 +89,7 @@ export default {
                 onFastClick: click,
                 onClick: click,
             });
-            map.addChild(mapListener);
+            this.map.addChild(mapListener);
 
             mapInputSearch.addEventListener("keydown", (event) => {
                 if (event.keyCode === 13) {
