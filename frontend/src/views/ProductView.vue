@@ -17,9 +17,10 @@ export default {
         }
     },
     methods: {
-        addToCart (id) {
+        addToCart,
+        closeAndAdd (id) {
             this.$emit('close');
-            addToCart(id);
+            this.addToCart(id);
         },
         openOverlay,
         openInfo () {
@@ -117,7 +118,7 @@ export default {
             <div class="productView_title">{{ product.name }}</div>
             <div class="productView_description">{{ product.description }}</div>
         </div>
-        <button @click="addToCart(product.id)">
+        <button @click="closeAndAdd(product.id)">
             + {{ product.priceDiscount !== 0 ? product.priceDiscount : product.price }}
         </button>
     </div>
