@@ -219,7 +219,8 @@ export default {
             <div>
                 <label for="">Город, улица и дом</label>
                 <input type="text" id="address" @input="oninp" v-model="address.address" placeholder="Адрес">
-                <select ref="addressSelect" v-model="selectedAddress" style="z-index: -1; opacity: 0" v-if="variables.length > 0" name="" id="">
+                {{variables.length}}
+                <select ref="addressSelect" v-model="selectedAddress" style="z-index: -1; opacity: 0" v-if="variables.length" name="" id="">
                     <option v-for="v in variables" :value="v.value">{{v.value}}</option>
                 </select>
             </div>
