@@ -12,6 +12,9 @@ export default {
             address: {},
             selected: 0,
             coords: [],
+
+            map: null,
+            marker: null,
         }
     },
     async mounted () {
@@ -70,6 +73,10 @@ export default {
                 coordinates: [50.100202, 53.195878]
             },icon);
             map.addChild(marker);
+
+            this.map = map;
+            this.marker = marker;
+
             const click = (object,event) => {
                 this.coords = [event.coordinates[0].toFixed(6), event.coordinates[1].toFixed(6)];
                 marker.update({
@@ -88,27 +95,33 @@ export default {
             map.addChild(mapListener);
 
             mapInputSearch.addEventListener("keydown", (event) => {
-                ymaps3.search({
-                    'text': "Самара, " + mapInputSearch.value
-                }).then((res) => {
-                    let center_update = res[0].geometry.coordinates;
-                    map.update({
-                        location: {
-                            center: center_update,
-                            zoom: 15,
-                            duration: 400
-                        }
-                    });
-
-                    marker.update({
-                        coordinates:center_update
-                    });
-
-                    console.log(center_update);
-                    this.coords = center_update;
-                    this.geocodeYandex(center_update[0], center_update[1])
-                })
+                if (event.keyCode === 13) {
+                    this.updateMarker();
+                }
             });
+        },
+        updateMarker () {
+            const mapInputSearch = document.querySelector('.addressComponent>div>div>input');
+            ymaps3.search({
+                'text': "Самара, " + mapInputSearch.value
+            }).then((res) => {
+                let center_update = res[0].geometry.coordinates;
+                this.map.update({
+                    location: {
+                        center: center_update,
+                        zoom: 15,
+                        duration: 400
+                    }
+                });
+
+                this.marker.update({
+                    coordinates:center_update
+                });
+
+                console.log(center_update);
+                this.coords = center_update;
+                this.geocodeYandex(center_update[0], center_update[1])
+            })
         },
         async geocodeYandex(lng, lat) {
             const apiKey = '72462881-8725-458b-ab67-3676c9c9ca7b';
@@ -141,6 +154,7 @@ export default {
             }
         },
         async save () {
+            this.updateMarker();
             this.$refs.addressComponent.checkAddress(this.coords[0], this.coords[1]);
         },
         async changeAddress (key) {
@@ -186,7 +200,7 @@ export default {
     <div class="address_adding_overlay" style="display: none">
         <div ref="map" class="yandex-map"></div>
         <div class="address_adding_overlay_footer">
-            <address-component @close="closeMapOverlay" ref="addressComponent" v-model="address"/>
+            <address-component @updateMarker="updateMarker" @close="closeMapOverlay" ref="addressComponent" v-model="address"/>
             <div class="address_adding_overlay_footer_buttons">
                 <button @click="closeMapOverlay" class="inactive">Удалить</button>
                 <button @click="save">Сохранить</button>
