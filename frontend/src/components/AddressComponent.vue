@@ -205,9 +205,9 @@ export default {
             this.loadAddress();
         },
         selectedAddress () {
-            this.variables = [];
-            this.address.address = this.selectedAddress;
-            this.selectedAddress = '';
+            // this.variables = [];
+            // this.address.address = this.selectedAddress;
+            // this.selectedAddress = '';
         }
     }
 }
