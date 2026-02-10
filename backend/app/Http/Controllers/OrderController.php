@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderCreateRequest;
+use App\Http\utils;
 use App\Models\Order;
 use App\Models\Setting;
 use App\Models\User;
@@ -123,8 +124,10 @@ class OrderController extends Controller
             "bonus" => $user->bonus - $bonusSum + $plusBonus,
         ]);
 
-        // todo: create field plusBonus on order
-        // todo: admin users
+        utils::addData($user, "spent_bonuses", $bonusSum);
+        utils::addData($user, "spent_rubles", $rublesSum+200);
+        utils::addData($user, "active_bonus", $plusBonus);
+        utils::addData($user, "count_product", count($cart));
 
         return response()->json($order);
     }
@@ -178,6 +181,9 @@ class OrderController extends Controller
             "bonus" => $user->bonus + $order->bonus - $order->plus_bonus,
         ]);
         $order->delete();
+
+        utils::addData($user, "spent_bonuses", -$order->bonus);
+        utils::addData($user, "active_bonus", -$order->plus_bonus);
     }
 
     public function history (Request $request) {

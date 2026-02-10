@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AchievementController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AllergensController;
@@ -28,6 +29,11 @@ Route::group(["prefix" => "api"], function () {
         Route::post("/", [OrderController::class, "create"]);
         Route::post("/{id}", [OrderController::class, "get"]);
         Route::post("/{id}/cancel", [OrderController::class, "delete"]);
+    });
+
+    Route::group(["prefix" => "achievement", "middleware" => CheckTelegram::class], function () {
+        Route::post("{achievement}/pin", [AchievementController::class, "pin"]);
+        Route::post("{achievement}/unpin", [AchievementController::class, "unpin"]);
     });
 
     Route::group(["prefix" => "webhook"], function () {
@@ -62,6 +68,13 @@ Route::group(["prefix" => "api"], function () {
             Route::get('/', [AdminController::class, 'users']);
             Route::get('{user}', [AdminController::class, 'showUser']);
             Route::post("{user}/bonus", [AdminController::class, 'changeUserBonus']);
+        });
+
+        Route::prefix('achievements')->group(function () {
+            Route::get('/', [AdminController::class, 'achievements']);
+            Route::post('/', [AdminController::class, 'createAchievement']);
+            Route::post('{achievement}', [AdminController::class, 'updateAchievement']);
+            Route::delete('{achievement}', [AdminController::class, 'deleteAchievement']);
         });
 
         Route::post("banner", [BannerController::class, "update"]);

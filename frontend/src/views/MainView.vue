@@ -23,6 +23,7 @@ import BonusView from "@/views/BonusView.vue";
 import OrderView from "@/views/OrderView.vue";
 import AuthView from "@/views/AuthView.vue";
 import AcceptView from "@/views/AcceptView.vue";
+import AchievementsView from "@/views/AchievementsView.vue";
 
 export default {
     name: "MainView",
@@ -41,6 +42,7 @@ export default {
         }
     },
     components: {
+        AchievementsView,
         AcceptView,
         AuthView,
         OrderView,
@@ -307,6 +309,7 @@ export default {
         <home-view v-if="$route.query.s === 'home'" />
         <profile-view v-else-if="$route.query.s === 'profile'" />
         <cart-view v-else-if="$route.query.s === 'cart'" />
+        <achievements-view v-else-if="$route.query.s === 'achievements'" />
         <product-view v-else-if="$route.query.s === 'product'" />
         <address-view v-else-if="$route.query.s === 'address'" />
         <history-view v-else-if="$route.query.s === 'history'" />

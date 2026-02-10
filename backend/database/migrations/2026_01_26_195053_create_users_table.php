@@ -23,6 +23,9 @@ return new class extends Migration
             $table->integer("address")->nullable();
             $table->integer("bonus")->default(0);
 
+            $table->json("pinned_achievements")->nullable();
+            $table->json("data")->nullable();
+
             $table->timestamps();
         });
     }

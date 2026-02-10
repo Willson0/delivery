@@ -126,11 +126,11 @@ export default {
 <!--                    <i class="fa-solid fa-book"></i>-->
 <!--                    <p>Курсы</p>-->
 <!--                </div>-->
-<!--                <div @click="$router.push('/admin/achievements')">-->
-<!--                    <div v-if="$route.path === '/admin/achievements'" class="adminnav_main_nav_main_el_point">&middot;</div>-->
-<!--                    <i class="fa-solid fa-trophy"></i>-->
-<!--                    <p>Достижения</p>-->
-<!--                </div>-->
+                <div @click="$router.push('/admin/achievements')">
+                    <div v-if="$route.path === '/admin/achievements'" class="adminnav_main_nav_main_el_point">&middot;</div>
+                    <i class="fa-solid fa-trophy"></i>
+                    <p>Достижения</p>
+                </div>
 <!--                <div @click="$router.push('/admin/support')">-->
 <!--                    <div v-if="$route.path === '/admin/support'" class="adminnav_main_nav_main_el_point">&middot;</div>-->
 <!--                    <i class="fa-solid fa-headset"></i>-->

@@ -147,4 +147,43 @@ class AdminController extends Controller
 
         return response()->json(["ok" => true]);
     }
+
+    public function achievements () {
+        return Achievement::all();
+    }
+
+    public function updateAchievement (Achievement $achievement, AdminUpdateAchievementRequest $request) {
+        $validate = $request->validated();
+
+        if ($request->has("image")) {
+            Storage::disk("public")->delete($achievement->image);
+
+            $picture = $request->file("image");
+            $time = time();
+            $url = "achievements/image_$time" . "." . $picture->extension();
+            Storage::disk("public")->putFileAs("achievements", $picture, "image_$time" . "." . $picture->extension());
+            $validate["image"] = $url;
+        }
+        $achievement->update($validate);
+        return $this->achievements();
+    }
+
+    public function deleteAchievement (Achievement $achievement, Request $request) {
+        Storage::disk("public")->delete($achievement->image);
+        $achievement->delete();
+        return $this->achievements();
+    }
+
+    public function createAchievement (AdminCreateAchievementRequest $request) {
+        $validate = $request->validated();
+
+        $picture = $request->file("image");
+        $time = time();
+        $url = "achievements/image_$time" . "." . $picture->extension();
+        Storage::disk("public")->putFileAs("achievements", $picture, "image_$time" . "." . $picture->extension());
+        $validate["image"] = $url;
+
+        Achievement::create($validate);
+        return $this->achievements();
+    }
 }

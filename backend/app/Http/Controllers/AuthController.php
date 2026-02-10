@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthUpdateRequest;
+use App\Http\utils;
+use App\Models\Achievement;
 use App\Models\Ad;
 use App\Models\Order;
 use App\Models\PhoneRequest;
@@ -48,6 +50,7 @@ class AuthController extends Controller
         $cache["ads"] = Ad::all();
         $cache["allergensList"] = ["пшеница","глютен","яичный белок","яичный желток","яйцо","молоко","лактоза","казеин","сыр","сливки","масло сливочное","маргарин","творог","рыба","лосось","тунец","краб","креветка","омары","гребешок","моллюски","устрица","анчоусы","морской гребешок","осьминог","угорь","кальмар","икра","арахис","фисташки","грецкий орех","кешью","миндаль","орехи","фундук","пекан","семечки подсолнечника","кунжут","семена кунжута","горчица","горчичное масло","соевый соус","соевые бобы","соевый лецитин","соевый белок","глутамат натрия","мясо курицы","курица","индейка","утка","свинина","говядина","баранина","желатин","колбасы","ветчина","бекон","колбасные изделия","лук","чеснок","сельдерей","морковь","перец","томат","помидор","кукуруза","картофель","дрожжи","уксус","винный уксус","рис","рисовый уксус","гречка","ячмень","ржаная мука","крахмал","мёд","черный перец","базилик","орегано","тимьян","розмарин","чили","хрен","майонез","кетчуп","горчица (соус)","кетчуп (соус)","петрушка","укроп","трюфель","трюфельное масло","корень имбиря","васаби","лимонная кислота","яблочный уксус","красители пищевые","консерванты","улучшители вкуса","перец халапеньо"];
         $cache["settings"] = Setting::all();
+        $cache["achievements"] = Achievement::all();
 
         $cache["orders"] = Order::where("user_id", $user->id)->where("finish", 0)->get()->toArray();
 
@@ -64,6 +67,8 @@ class AuthController extends Controller
 
         $data = $request->validated();
         $user->update($data);
+
+        if ($request->has("addresses")) utils::addData($user, "count_product", 1);
 
         return response()->json("ok");
     }
@@ -91,7 +96,8 @@ class AuthController extends Controller
                     "phone" => $request->phone, // todo: check correct number
                     "type" => 2,
                     "status" => 0,
-                    "password" => 1
+                    "password" => 1,
+                    "pinned_achievements" => json_encode([]),
                 ]
             ]);
             if ($req->status() !== 200) {

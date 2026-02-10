@@ -6,6 +6,7 @@ import AdminUserIndexView from "@/views/admin/adminUserIndexView.vue";
 import AdminLoginView from "@/views/admin/adminLoginView.vue";
 import adminMailingView from "@/views/admin/adminMailingView.vue";
 import adminAdView from "@/views/admin/adminAdView.vue";
+import adminAchievementsView from "@/views/admin/adminAchievementsView.vue";
 
 
 const routes = [
@@ -52,6 +53,12 @@ const routes = [
         component: adminMailingView,
         meta: { title: 'CryptoCourses | Mailing', h: 'Рассылка' },
         name: 'mailing'
+    },
+    {
+        path: "/admin/achievements",
+        component: adminAchievementsView,
+        meta: { title: 'CryptoCourses | Achievements', h: 'Достижения' },
+        name: 'achievements'
     },
 ]
 
