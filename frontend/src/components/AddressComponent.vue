@@ -188,7 +188,7 @@ export default {
                     this.variables = result.filter(a => a.value.includes('Самара'));
                     console.log(this.variables);
                 } catch (e) {
-                    this.variables = [];
+                    // this.variables = [];
                 }
                 requestAnimationFrame(() => this.$refs.addressSelect.focus())
             }
@@ -204,9 +204,9 @@ export default {
             this.loadAddress();
         },
         selectedAddress () {
-            this.variables = [];
-            this.address.address = this.selectedAddress;
-            this.selectedAddress = '';
+            // this.variables = [];
+            // this.address.address = this.selectedAddress;
+            // this.selectedAddress = '';
         }
     }
 }
