@@ -184,7 +184,10 @@ export default {
             if (window.ymaps3?.suggest) {
                 try {
                     const result = await ymaps3.suggest({ text: query, results: 5 });
+                    console.log(result);
                     this.variables = result.filter(a => a.value.includes('Самара'));
+                    console.log(this.variables);
+
                     this.$refs.addressSelect.focus();
                 } catch (e) {
                     this.variables = [];
