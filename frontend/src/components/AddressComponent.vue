@@ -184,6 +184,7 @@ export default {
             if (window.ymaps3?.suggest) {
                 try {
                     const result = await ymaps3.suggest({ text: query, results: 5 });
+                    console.log(result);
                     this.variables = result.filter(a => a.title.includes('Самара'));
                 } catch (e) {
                     this.variables = [];
