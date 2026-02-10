@@ -124,7 +124,7 @@ export default {
                         <path d="M10.7711 5.47958C18.0772 -1.82653 29.9228 -1.82653 37.2289 5.47958L42.5204 10.7711C49.8265 18.0772 49.8265 29.9228 42.5204 37.2289L37.2289 42.5204C29.9228 49.8265 18.0772 49.8265 10.7711 42.5204L5.47958 37.2289C-1.82653 29.9228 -1.82653 18.0772 5.47958 10.7711L10.7711 5.47958Z"
                               fill="var(--accent)" id="myPlaceholder" style=""/>
                         <image v-if="ach.image" x="0" y="0" width="48" height="48"
-                               :href="config.storage + ach.image"
+                               :href="config.localStorage + ach.image"
                                clip-path="url(#myCustomClip)" preserveAspectRatio="xMidYMid slice"/>
                     </svg>
                 </template>
@@ -136,7 +136,7 @@ export default {
                     </defs>
                     <path d="M10.7711 5.47958C18.0772 -1.82653 29.9228 -1.82653 37.2289 5.47958L42.5204 10.7711C49.8265 18.0772 49.8265 29.9228 42.5204 37.2289L37.2289 42.5204C29.9228 49.8265 18.0772 49.8265 10.7711 42.5204L5.47958 37.2289C-1.82653 29.9228 -1.82653 18.0772 5.47958 10.7711L10.7711 5.47958Z"
                           fill="var(--accent)" id="myPlaceholder" style=""/>
-                    <image x="0" y="0" width="48" height="48" :href="config.storage + ach.image"
+                    <image x="0" y="0" width="48" height="48" :href="config.localStorage + ach.image"
                            clip-path="url(#myCustomClip)" preserveAspectRatio="xMidYMid slice"/>
                 </svg>
                 <svg v-for="ach in Math.max(0, 5 - (user.achievements?.filter(ach => hasAchievement(ach)).length ?? 0))" width="72" height="72" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
