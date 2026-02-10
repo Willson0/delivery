@@ -96,7 +96,7 @@ export default {
         },
         updateMarker () {
             const mapInputSearch = document.querySelector('.addressComponent>div>div>input');
-            ymaps3.search({
+            window.ymaps3.search({
                 'text': "Самара, " + mapInputSearch.value
             }).then((res) => {
                 let center_update = res[0].geometry.coordinates;
@@ -144,6 +144,7 @@ export default {
                 if (!city || !street || !house) this.$refs.addressComponent.address.address = "";
                 else this.$refs.addressComponent.address.address = city + ", " + street + ", " + house;
             } catch (e) {
+                console.log(e);
                 this.$refs.addressComponent.address.address = "";
             }
         },
