@@ -72,6 +72,20 @@ export default {
                 notify("Не выбрана точка", 1);
                 return console.log("Undefined latitude or longitude")
             }
+
+            const apiKey = '72462881-8725-458b-ab67-3676c9c9ca7b';
+            const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&geocode=${latitude},${longitude}&format=json`;
+            try {
+                const resp = await fetch(url);
+                const data = await resp.json();
+                const feature = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
+                if (!feature) return notify("Не выбрана точка", 1);
+
+                const components = feature.metaDataProperty.GeocoderMetaData.Address.Components;
+                const area = components.find(c => c.kind === "area")?.name;
+                if (area !== 'городской округ Самара') return notify("Доставка только по Самаре!", 1)
+            } catch (e) {}
+
             let rules = [
                 ["address", this.address.address.length > 5],
                 ["door", /^(?:0|[1-9][0-9]*)$/.test(this.address.door)],

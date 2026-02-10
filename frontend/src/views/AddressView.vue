@@ -90,7 +90,7 @@ export default {
             mapInputSearch.addEventListener("keydown", (event) => {
                 if(event.keyCode === 13){
                     ymaps3.search({
-                        'text': mapInputSearch.value
+                        'text': "Самара, " + mapInputSearch.value
                     }).then((res) => {
                         let center_update = res[0].geometry.coordinates;
                         map.update({
