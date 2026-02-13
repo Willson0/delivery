@@ -105,15 +105,22 @@ class AuthController extends Controller
             }
         }
 
+//        $req = Http::withHeaders([
+//            'Authentication' => env("INTERNAL_TOKEN"),
+//        ])->post("https://kfsamara.ru/api/users/loginSms", [
+//            "conditions" => [
+//                [
+//                    "k" => "phone",
+//                    "v" => "+" . $request->phone,
+//                ]
+//            ]
+//        ]);
+
         $req = Http::withHeaders([
             'Authentication' => env("INTERNAL_TOKEN"),
-        ])->post("https://kfsamara.ru/api/users/loginSms", [
-            "conditions" => [
-                [
-                    "k" => "phone",
-                    "v" => "+" . $request->phone,
-                ]
-            ]
+        ])->post("https://kfsamara.ru/api/clients/login", [
+            "phone" => $request->phone,
+            "route" => "voice",
         ]);
 
         if ($req->status() !== 200) {
