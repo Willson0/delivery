@@ -87,8 +87,6 @@
 ### Установка и запуск
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
 docker-compose up --build
 ```
 
